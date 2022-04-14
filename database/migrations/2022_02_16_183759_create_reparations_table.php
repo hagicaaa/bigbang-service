@@ -18,6 +18,10 @@ class CreateReparationsTable extends Migration
             $table->string('inv_id');
             $table->unsignedBigInteger('computer_id');
             $table->unsignedBigInteger('customer_id');
+            $table->date('inspection_date');
+            $table->date('repair_start');
+            $table->date('post_repair_inspection_date');
+            $table->date('repair_finish');
             $table->unsignedBigInteger('received_by');
             $table->timestamps();
 
