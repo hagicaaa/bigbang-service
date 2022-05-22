@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Reparation extends Model
+class Computer extends Model
 {
     use CrudTrait;
 
@@ -15,11 +15,11 @@ class Reparation extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'reparations';
+    protected $table = 'computers';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = [];
+    protected $fillable = ['brand_id','type','serial_number','problem','eq_bag','eq_charger_cable'];
     // protected $hidden = [];
     // protected $dates = [];
 
