@@ -19,7 +19,7 @@ class Reparation extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = [];
+    protected $fillable = ['inv_id','computer_id','customer_id','inspection_date','repair_start','post_repair_inspection_date','repair_finish','received_by'];
     // protected $hidden = [];
     // protected $dates = [];
 
