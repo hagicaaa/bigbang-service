@@ -39,12 +39,21 @@ class CustomerCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('id');
-        CRUD::column('name');
-        CRUD::column('phone');
-        CRUD::column('email');
-        CRUD::column('created_at');
-        CRUD::column('updated_at');
+        CRUD::addColumn([
+            'name' => 'name',
+            'label' => 'Nama'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'phone',
+            'label' => 'No HP',
+            'prefix' => '+62'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'email',
+            'label' => 'Email'
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -63,12 +72,24 @@ class CustomerCrudController extends CrudController
     {
         CRUD::setValidation(CustomerRequest::class);
 
-        CRUD::field('id');
-        CRUD::field('name');
-        CRUD::field('phone');
-        CRUD::field('email');
-        CRUD::field('created_at');
-        CRUD::field('updated_at');
+        CRUD::addField([
+            'name' => 'name',
+            'label' => 'Nama',
+            'type' => 'text'
+        ]);
+
+        CRUD::addField([
+            'name' => 'phone',
+            'label' => 'No HP',
+            'type' => 'text',
+            'prefix' => '+62'
+        ]);
+
+        CRUD::addField([
+            'name' => 'email',
+            'label' => 'Email',
+            'type' => 'email'
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
