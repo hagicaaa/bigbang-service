@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Brand;
 
 class Computer extends Model
 {
@@ -34,6 +35,10 @@ class Computer extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function brand_id()
+    {
+        return $this->belongsTo(Brand::class); 
+    }
 
     /*
     |--------------------------------------------------------------------------

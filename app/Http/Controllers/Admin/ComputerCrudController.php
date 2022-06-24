@@ -39,15 +39,31 @@ class ComputerCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('id');
-        CRUD::column('brand_id');
-        CRUD::column('type');
-        CRUD::column('serial_number');
-        CRUD::column('problem');
-        CRUD::column('eq_bag');
-        CRUD::column('eq_charger_cable');
-        CRUD::column('created_at');
-        CRUD::column('updated_at');
+        CRUD::addColumn([
+            'name' => 'brand_id',
+            'label' => 'Brand'
+        ]);
+        CRUD::addColumn([
+            'name' => 'type',
+            'label' => 'Type'
+        ]);
+        CRUD::addColumn([
+            'name' => 'serial_number',
+            'label' => 'Serial Number'
+        ]);
+        CRUD::addColumn([
+            'name' => 'problem',
+            'label' => 'Problem'
+        ]);
+        CRUD::addColumn([
+            'name' => 'eq_bag',
+            'label' => 'Bag'
+        ]);
+        CRUD::addColumn([
+            'name' => 'eq_charger_cable',
+            'label' => 'Charger Cable'
+        ]);
+        
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -66,15 +82,36 @@ class ComputerCrudController extends CrudController
     {
         CRUD::setValidation(ComputerRequest::class);
 
-        CRUD::field('id');
-        CRUD::field('brand_id');
-        CRUD::field('type');
-        CRUD::field('serial_number');
-        CRUD::field('problem');
-        CRUD::field('eq_bag');
-        CRUD::field('eq_charger_cable');
-        CRUD::field('created_at');
-        CRUD::field('updated_at');
+        CRUD::addField([
+            'name' => 'brand_id',
+            'label' => 'Brand',
+            'type' => 'text' //
+        ]);
+        CRUD::addField([
+            'name' => 'type',
+            'label' => 'Type',
+            'type' => 'text'
+        ]);
+        CRUD::addField([
+            'name' => 'serial_number',
+            'label' => 'Serial Number',
+            'type' => 'text'
+        ]);
+        CRUD::addField([
+            'name' => 'problem',
+            'label' => 'Problem',
+            'type' => 'text'
+        ]);
+        CRUD::addField([
+            'name' => 'eq_bag',
+            'label' => 'Bag',
+            'type' => 'text' //
+        ]);
+        CRUD::addField([
+            'name' => 'eq_charger_cable',
+            'label' => 'Charger Cable',
+            'type' => 'text' //
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
