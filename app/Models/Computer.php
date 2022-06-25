@@ -35,10 +35,20 @@ class Computer extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function brand_id()
+    public function brand()
     {
         return $this->belongsTo(Brand::class); 
     }
+
+    // public function eq_bag()
+    // {
+    //     if($eq_bag == 1){
+    //         return "Yes";
+    //     }
+    //     else{
+    //         return "No";
+    //     }
+    // }
 
     /*
     |--------------------------------------------------------------------------

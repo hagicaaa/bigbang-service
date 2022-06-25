@@ -38,7 +38,7 @@ class ComputerCrudController extends CrudController
      * @return void
      */
     protected function setupListOperation()
-    {
+    {   
         CRUD::addColumn([
             'name' => 'brand_id',
             'label' => 'Brand'
@@ -85,7 +85,10 @@ class ComputerCrudController extends CrudController
         CRUD::addField([
             'name' => 'brand_id',
             'label' => 'Brand',
-            'type' => 'text' //
+            'type' => 'select2',
+            'entity'    => 'brand', 
+            'model'     => "App\Models\Brand",
+            'attribute' => 'name',
         ]);
         CRUD::addField([
             'name' => 'type',
@@ -105,12 +108,12 @@ class ComputerCrudController extends CrudController
         CRUD::addField([
             'name' => 'eq_bag',
             'label' => 'Bag',
-            'type' => 'text' //
+            'type' => 'checkbox' //
         ]);
         CRUD::addField([
             'name' => 'eq_charger_cable',
             'label' => 'Charger Cable',
-            'type' => 'text' //
+            'type' => 'checkbox' //
         ]);
 
         /**
