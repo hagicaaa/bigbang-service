@@ -55,14 +55,6 @@ class ComputerCrudController extends CrudController
             'name' => 'problem',
             'label' => 'Problem'
         ]);
-        CRUD::addColumn([
-            'name' => 'eq_bag',
-            'label' => 'Bag'
-        ]);
-        CRUD::addColumn([
-            'name' => 'eq_charger_cable',
-            'label' => 'Charger Cable'
-        ]);
         
 
         /**
