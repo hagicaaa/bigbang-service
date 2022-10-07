@@ -14,10 +14,10 @@ class AddNullableOnReparationsTable extends Migration
     public function up()
     {
         Schema::table('reparations', function (Blueprint $table) {
-            $table->date('inspection_date')->nullable();
-            $table->date('repair_start')->nullable();
-            $table->date('repair_finish')->nullable();
-            $table->date('post_repair_inspection_date')->nullable();
+            $table->date('inspection_date')->nullable()->change();
+            $table->date('repair_start')->nullable()->change();
+            $table->date('repair_finish')->nullable()->change();
+            $table->date('post_repair_inspection_date')->nullable()->change();
         });
     }
 
@@ -29,10 +29,10 @@ class AddNullableOnReparationsTable extends Migration
     public function down()
     {
         Schema::table('reparations', function (Blueprint $table) {
-            $table->date('inspection_date')->nullable(false);
-            $table->date('repair_start')->nullable(false);
-            $table->date('repair_finish')->nullable(false);
-            $table->date('post_repair_inspection_date')->nullable(false);
+            $table->date('inspection_date')->nullable(false)->change();
+            $table->date('repair_start')->nullable(false)->change();
+            $table->date('repair_finish')->nullable(false)->change();
+            $table->date('post_repair_inspection_date')->nullable(false)->change();
         });
     }
 }
