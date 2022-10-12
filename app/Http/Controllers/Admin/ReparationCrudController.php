@@ -40,7 +40,22 @@ class ReparationCrudController extends CrudController
     protected function setupListOperation()
     {
         
-
+        CRUD::addColumn([
+            'label' => 'Invoice ID',
+            'name' => 'inv_id'
+        ]);
+        CRUD::addColumn([
+            'label' => 'Computer',
+            'name' => 'computer_id'
+        ]);
+        CRUD::addColumn([
+            'label' => 'Customer',
+            'name' => 'customer_id',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Received by',
+            'name' =>'received_by'
+        ]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
