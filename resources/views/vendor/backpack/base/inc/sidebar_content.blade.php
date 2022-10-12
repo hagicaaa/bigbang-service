@@ -9,7 +9,7 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('customer') }}'><i class='nav-icon la la-address-card'></i> Customers</a></li>
     </ul>
 </li>
-@role('Admin')
+@role('admin')
 <li class="nav-item nav-dropdown">
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-users"></i> Authentication</a>
     <ul class="nav-dropdown-items">
