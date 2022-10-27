@@ -22,6 +22,7 @@ class CreateReparationsTable extends Migration
             $table->date('repair_start');
             $table->date('post_repair_inspection_date');
             $table->date('repair_finish');
+            $table->date('paid_at')->nullable();
             $table->unsignedBigInteger('received_by');
             $table->timestamps();
 

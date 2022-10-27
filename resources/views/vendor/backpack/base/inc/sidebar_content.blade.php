@@ -5,7 +5,6 @@
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-server"></i> Master Data</a>
     <ul class="nav-dropdown-items">
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('computer') }}'><i class='nav-icon la la-desktop'></i> Computers</a></li>
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('brand') }}'><i class='nav-icon la la-tag'></i> Brands</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('customer') }}'><i class='nav-icon la la-address-card'></i> Customers</a></li>
     </ul>
 </li>

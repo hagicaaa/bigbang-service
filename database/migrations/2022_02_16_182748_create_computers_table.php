@@ -15,15 +15,13 @@ class CreateComputersTable extends Migration
     {
         Schema::create('computers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('brand_id');
+            $table->string('brand');
             $table->string('type');
             $table->string('serial_number');
             $table->string('problem');
             $table->boolean('eq_bag');
             $table->boolean('eq_charger_cable');
             $table->timestamps();
-
-            $table->foreign('brand_id')->references('id')->on('brands');
         });
     }
 

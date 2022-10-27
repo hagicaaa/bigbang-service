@@ -77,10 +77,7 @@ class ComputerCrudController extends CrudController
         CRUD::addField([
             'name' => 'brand_id',
             'label' => 'Brand',
-            'type' => 'select2',
-            'entity'    => 'brand', 
-            'model'     => "App\Models\Brand",
-            'attribute' => 'name',
+            'type' => 'text',
         ]);
         CRUD::addField([
             'name' => 'type',

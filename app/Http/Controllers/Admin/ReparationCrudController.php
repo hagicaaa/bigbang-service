@@ -82,6 +82,79 @@ class ReparationCrudController extends CrudController
     {
         CRUD::setValidation(ReparationRequest::class);
 
+        CRUD::addField([
+            'name' => 'name',
+            'type' => 'text',
+            'label' => 'Customer Name',
+        ]);
+
+        CRUD::addField([
+            'name' => 'phone',
+            'type' => 'text',
+            'label' => 'Phone',
+            'prefix' => '+62',
+            'wrapper' => [
+                'class' => 'form-group col-md-6',
+            ]
+        ]);
+
+        CRUD::addField([
+            'name' => 'email',
+            'type' => 'text',
+            'label' => 'Email',
+            'wrapper' => [
+                'class' => 'form-group col-md-6',
+            ]
+        ]);
+
+        CRUD::addField([
+            'name' => 'brand_id', 
+            'type' => 'text',
+            'label' => 'Brand',
+            'wrapper' => [
+                'class' => 'form-group col-md-6',
+            ]
+        ]);
+
+        CRUD::addField([
+            'name' => 'type',
+            'type' => 'text',
+            'label' => 'Type',
+            'wrapper' => [
+                'class' => 'form-group col-md-6',
+            ]
+        ]);
+
+        CRUD::addField([
+            'name' => 'serial_number',
+            'type' => 'text',
+            'label' => 'Serial Number',
+        ]);
+
+        CRUD::addField([
+            'name' => 'problem',
+            'type' => 'text',
+            'label' => 'Problem',
+        ]);
+
+        CRUD::addField([
+            'name' => 'eq_bag',
+            'type' => 'checkbox',
+            'label' => 'Bag',
+            'wrapper' => [
+                'class' => 'form-group col-md-3',
+            ]
+        ]);
+
+        CRUD::addField([
+            'name' => 'eq_charger',
+            'type' => 'checkbox',
+            'label' => 'Charger',
+            'wrapper' => [
+                'class' => 'form-group col-md-3',
+            ]
+        ]);
+
         
 
         /**
