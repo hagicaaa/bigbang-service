@@ -8,7 +8,9 @@ use App\Models\Customer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class ReparationCrudController
@@ -167,16 +169,33 @@ class ReparationCrudController extends CrudController
          * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
          */
     }
-
+    
     public function store()
     {
-        $request = $this->crud->getRequest()->request;
+        $response = $this->traitStore();
+        $validator = Validator::make($this->crud->getRequest()->request->all(), [
+            'name' => 'required',
+            'phone' => 'required',
+            'brand' => 'required',
+            'type' => 'required',
+            'serial_number' => 'required',
+            'problem' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         
+        
+        $request = $this->crud->getRequest()->request;
+
         $customer = new Customer();
         $customer->name = $request->getRequest('name');
         $customer->phone = $request->getRequest('phone');
         $customer->email = $request->getRequest('email');
         $customer->save();
+
         $computer = new Computer();
         $computer->brand = $request->getRequest('brand');
         $computer->type = $request->getRequest('type');
@@ -186,7 +205,25 @@ class ReparationCrudController extends CrudController
         $computer->eq_charger_cable = $request->getRequest('eq_charger_cable');
         $computer->save();
 
-        $response = $this->traitStore();
+        $reparation = new Reparation();
+        $reparation->inv_id = "11";
+        $reparation->computer_id = 1;
+        $reparation->customer_id = 1;
+        $reparation->save();
+
+        //     catch(\Exception $e){
+        //     DB::rollBack();
+
+        //     //set error data for error log
+        //     $error_data = [];
+        //     $error_data["function"] = "store";
+        //     $error_data["controller"] = "ReparationCrudController";
+        //     $error_data["message"] = $e->getMessage();
+
+        //     Log::error("Create failed", $error_data);
+
+        //     \Alert::error("Create failed")->flash();
+        // }
         return $response;
 
     }

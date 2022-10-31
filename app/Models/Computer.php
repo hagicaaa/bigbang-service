@@ -20,7 +20,7 @@ class Computer extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['brand_id','type','serial_number','problem','eq_bag','eq_charger_cable'];
+    protected $fillable = ['brand','type','serial_number','problem','eq_bag','eq_charger_cable'];
     // protected $hidden = [];
     // protected $dates = [];
 

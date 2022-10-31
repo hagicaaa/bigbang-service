@@ -26,7 +26,12 @@ class ReparationRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name' => 'required',
+            'phone' => 'required',
+            'brand' => 'required',
+            'type' => 'required',
+            'serial_number' => 'required',
+            'problem' => 'required',
         ];
     }
 
