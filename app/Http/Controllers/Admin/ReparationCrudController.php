@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ReparationRequest;
+use App\Models\Computer;
+use App\Models\Customer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ReparationCrudController
@@ -14,7 +18,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class ReparationCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -108,7 +112,7 @@ class ReparationCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'brand_id', 
+            'name' => 'brand', 
             'type' => 'text',
             'label' => 'Brand',
             'wrapper' => [
@@ -162,6 +166,29 @@ class ReparationCrudController extends CrudController
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
          */
+    }
+
+    public function store()
+    {
+        $request = $this->crud->getRequest()->request;
+        
+        $customer = new Customer();
+        $customer->name = $request->getRequest('name');
+        $customer->phone = $request->getRequest('phone');
+        $customer->email = $request->getRequest('email');
+        $customer->save();
+        $computer = new Computer();
+        $computer->brand = $request->getRequest('brand');
+        $computer->type = $request->getRequest('type');
+        $computer->serial_number = $request->getRequest('serial_number');
+        $computer->problem = $request->getRequest('problem');
+        $computer->eq_bag = $request->getRequest('eq_bag');
+        $computer->eq_charger_cable = $request->getRequest('eq_charger_cable');
+        $computer->save();
+
+        $response = $this->traitStore();
+        return $response;
+
     }
 
     /**
