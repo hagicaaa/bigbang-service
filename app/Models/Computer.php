@@ -35,10 +35,6 @@ class Computer extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class); 
-    }
 
     // public function eq_bag()
     // {

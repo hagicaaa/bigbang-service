@@ -40,7 +40,7 @@ class ComputerCrudController extends CrudController
     protected function setupListOperation()
     {   
         CRUD::addColumn([
-            'name' => 'brand_id',
+            'name' => 'brand',
             'label' => 'Brand'
         ]);
         CRUD::addColumn([
@@ -75,7 +75,7 @@ class ComputerCrudController extends CrudController
         CRUD::setValidation(ComputerRequest::class);
 
         CRUD::addField([
-            'name' => 'brand_id',
+            'name' => 'brand',
             'label' => 'Brand',
             'type' => 'text',
         ]);

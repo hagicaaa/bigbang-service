@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\ReparationRequest;
 use App\Models\Computer;
 use App\Models\Customer;
+use App\Models\Reparation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class ReparationCrudController
@@ -153,7 +155,7 @@ class ReparationCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'eq_charger',
+            'name' => 'eq_charger_cable',
             'type' => 'checkbox',
             'label' => 'Charger',
             'wrapper' => [
@@ -172,7 +174,6 @@ class ReparationCrudController extends CrudController
     
     public function store()
     {
-        $response = $this->traitStore();
         $validator = Validator::make($this->crud->getRequest()->request->all(), [
             'name' => 'required',
             'phone' => 'required',
@@ -183,48 +184,50 @@ class ReparationCrudController extends CrudController
         ]);
         if ($validator->fails()) {
             return back()
-                ->withErrors($validator)
-                ->withInput();
+            ->withErrors($validator)
+            ->withInput();
         }
         
         
         $request = $this->crud->getRequest()->request;
+        
+        DB::beginTransaction();
+        try{
+            $customer = new Customer();
+            $customer->name = $request->get('name');
+            $customer->phone = $request->get('phone');
+            $customer->email = $request->get('email');
+            $customer->save();
+    
+            $computer = new Computer();
+            $computer->brand = $request->get('brand');
+            $computer->type = $request->get('type');
+            $computer->serial_number = $request->get('serial_number');
+            $computer->problem = $request->get('problem');
+            $computer->eq_bag = $request->get('eq_bag');
+            $computer->eq_charger_cable = $request->get('eq_charger_cable');
+            $computer->save();
+    
+            $reparation = new Reparation();
+            $reparation->inv_id = strtotime("now");
+            $reparation->computer_id = $computer->id;
+            $reparation->customer_id = $customer->id;
+            $reparation->received_by = backpack_user()->id;
+            $reparation->save();
+            DB::commit();
+        } catch(\Exception $e){
+            DB::rollBack();
 
-        $customer = new Customer();
-        $customer->name = $request->getRequest('name');
-        $customer->phone = $request->getRequest('phone');
-        $customer->email = $request->getRequest('email');
-        $customer->save();
+            //set error data for error log
+            $error_data = [];
+            $error_data["function"] = "store";
+            $error_data["controller"] = "ReparationCrudController";
+            $error_data["message"] = $e->getMessage();
 
-        $computer = new Computer();
-        $computer->brand = $request->getRequest('brand');
-        $computer->type = $request->getRequest('type');
-        $computer->serial_number = $request->getRequest('serial_number');
-        $computer->problem = $request->getRequest('problem');
-        $computer->eq_bag = $request->getRequest('eq_bag');
-        $computer->eq_charger_cable = $request->getRequest('eq_charger_cable');
-        $computer->save();
-
-        $reparation = new Reparation();
-        $reparation->inv_id = "11";
-        $reparation->computer_id = 1;
-        $reparation->customer_id = 1;
-        $reparation->save();
-
-        //     catch(\Exception $e){
-        //     DB::rollBack();
-
-        //     //set error data for error log
-        //     $error_data = [];
-        //     $error_data["function"] = "store";
-        //     $error_data["controller"] = "ReparationCrudController";
-        //     $error_data["message"] = $e->getMessage();
-
-        //     Log::error("Create failed", $error_data);
-
-        //     \Alert::error("Create failed")->flash();
-        // }
-        return $response;
+            Log::error("Create failed", $error_data);
+            \Alert::error("Create failed")->flash();
+        }
+        return $this->traitStore();
 
     }
 
