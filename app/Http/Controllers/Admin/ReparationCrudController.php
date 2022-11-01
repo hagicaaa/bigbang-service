@@ -227,7 +227,8 @@ class ReparationCrudController extends CrudController
             Log::error("Create failed", $error_data);
             \Alert::error("Create failed")->flash();
         }
-        return $this->traitStore();
+        \Alert::add('success', 'Data added succesfully.')->flash();
+        return redirect(backpack_url('reparation'));
 
     }
 
