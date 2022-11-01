@@ -90,6 +90,9 @@ class ReparationCrudController extends CrudController
     {
         CRUD::setValidation(ReparationRequest::class);
 
+        $this->crud->removeSaveAction('save_and_preview');
+        $this->crud->removeSaveAction('save_and_new');
+        $this->crud->removeSaveAction('save_and_edit');
         CRUD::addField([
             'name' => 'name',
             'type' => 'text',
