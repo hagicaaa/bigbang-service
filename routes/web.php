@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', '/admin');
+Route::view('/cek-reparasi','welcome');
 Route::group([
     'prefix' => config('backpack.base.route_prefix', 'admin'),
     'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
