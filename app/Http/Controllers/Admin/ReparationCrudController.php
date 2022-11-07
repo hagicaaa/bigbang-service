@@ -23,8 +23,8 @@ class ReparationCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    // use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     /**
@@ -35,8 +35,9 @@ class ReparationCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Reparation::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/reparation');
-        CRUD::setEntityNameStrings('reparation', 'reparations');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/need-checking');
+        CRUD::setEntityNameStrings('reparation', 'Need Checking');
+        CRUD::addClause('where', 'inspection_date', '=', NULL);
     }
 
     /**
@@ -231,7 +232,7 @@ class ReparationCrudController extends CrudController
             \Alert::error("Create failed")->flash();
         }
         \Alert::add('success', 'Data added succesfully.')->flash();
-        return redirect(backpack_url('reparation'));
+        return redirect(backpack_url('need-checking'));
 
     }
 
