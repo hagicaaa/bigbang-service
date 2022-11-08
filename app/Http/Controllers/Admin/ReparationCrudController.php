@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
 
 /**
  * Class ReparationCrudController
@@ -48,7 +49,7 @@ class ReparationCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        
+        CRUD::addButtonFromView('line', 'done-inspection', 'done_inspection', 'beginning');
         CRUD::addColumn([
             'label' => 'Invoice ID',
             'name' => 'inv_id'
@@ -245,5 +246,29 @@ class ReparationCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function doneInspection($id)
+    {
+        $reparation = Reparation::where('id', $id)->first();
+        DB::beginTransaction();
+        try{
+            $reparation->inspection_date = Carbon::now();
+            $reparation->save();
+            DB::commit();
+        } catch(\Exception $e){
+            DB::rollBack();
+
+            //set error data for error log
+            $error_data = [];
+            $error_data["function"] = "doneInspection";
+            $error_data["controller"] = "ReparationCrudController";
+            $error_data["message"] = $e->getMessage();
+
+            Log::error("Create failed", $error_data);
+            \Alert::error("Create failed")->flash();
+        }
+        \Alert::add('success', 'Data updated succesfully.')->flash();
+        return redirect(backpack_url('need-checking'));
     }
 }
