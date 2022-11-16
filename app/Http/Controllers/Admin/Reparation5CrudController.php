@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 
 /**
- * Class Reparation4CrudController
+ * Class Reparation5CrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class Reparation4CrudController extends CrudController
+class Reparation5CrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     // use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -36,10 +36,10 @@ class Reparation4CrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Reparation::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/post-reparation-checking');
-        CRUD::setEntityNameStrings('reparation', 'Post Reparation Checking');
-        CRUD::addClause('where', 'repair_finish', '!=', NULL);
-        CRUD::addClause('where', 'post_repair_inspection_date', '=', NULL);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/need-pickup');
+        CRUD::setEntityNameStrings('reparation', 'Need Pickup');
+        CRUD::addClause('where', 'post_repair_inspection_date', '!=', NULL);
+        CRUD::addClause('where', 'paid_at', '!=', NULL);
     }
 
     /**
@@ -50,7 +50,7 @@ class Reparation4CrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::addButtonFromView('line', 'finish-checking', 'done_checking', 'beginning');
+        CRUD::addButtonFromView('line', 'picked-up', 'pickup', 'beginning');
         CRUD::addColumn([
             'label' => 'Invoice ID',
             'name' => 'inv_id'
@@ -114,12 +114,13 @@ class Reparation4CrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    public function finishChecking($id)
+    public function pickUp($id)
     {
         $reparation = Reparation::where('id', $id)->first();
         DB::beginTransaction();
         try{
-            $reparation->post_reparation_inspection_date = Carbon::now();
+            $reparation->paid_at = Carbon::now();
+            // $reparation-> = Carbon::now();
             $reparation->save();
             DB::commit();
         } catch(\Exception $e){
@@ -127,7 +128,7 @@ class Reparation4CrudController extends CrudController
 
             //set error data for error log
             $error_data = [];
-            $error_data["function"] = "finishChecking";
+            $error_data["function"] = "pickUp";
             $error_data["controller"] = "ReparationCrudController";
             $error_data["message"] = $e->getMessage();
 
@@ -135,6 +136,6 @@ class Reparation4CrudController extends CrudController
             \Alert::error("Create failed")->flash();
         }
         \Alert::add('success', 'Data updated succesfully.')->flash();
-        return redirect(backpack_url('post-reparation-checking'));
+        return redirect(backpack_url('need-pickup'));
     }
 }

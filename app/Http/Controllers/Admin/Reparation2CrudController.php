@@ -3,8 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ReparationRequest;
+use App\Models\Computer;
+use App\Models\Customer;
+use App\Models\Reparation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Reparation2CrudController
@@ -27,9 +36,10 @@ class Reparation2CrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Reparation::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/ongoing-reparation');
-        CRUD::setEntityNameStrings('reparation', 'Ongoing Reparations');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/need-reparation');
+        CRUD::setEntityNameStrings('reparation', 'Need Reparation');
         CRUD::addClause('where', 'inspection_date', '!=', NULL);
+        CRUD::addClause('where', 'repair_start', '=', NULL);
     }
 
     /**
@@ -40,6 +50,7 @@ class Reparation2CrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::addButtonFromView('line', 'start-repair', 'repair_start', 'beginning');
         CRUD::addColumn([
             'label' => 'Invoice ID',
             'name' => 'inv_id'
@@ -101,5 +112,29 @@ class Reparation2CrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function startRepair($id)
+    {
+        $reparation = Reparation::where('id', $id)->first();
+        DB::beginTransaction();
+        try{
+            $reparation->repair_start = Carbon::now();
+            $reparation->save();
+            DB::commit();
+        } catch(\Exception $e){
+            DB::rollBack();
+
+            //set error data for error log
+            $error_data = [];
+            $error_data["function"] = "startRepair";
+            $error_data["controller"] = "ReparationCrudController";
+            $error_data["message"] = $e->getMessage();
+
+            Log::error("Create failed", $error_data);
+            \Alert::error("Create failed")->flash();
+        }
+        \Alert::add('success', 'Data updated succesfully.')->flash();
+        return redirect(backpack_url('need-reparation'));
     }
 }

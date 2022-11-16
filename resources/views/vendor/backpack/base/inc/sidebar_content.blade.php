@@ -4,6 +4,7 @@
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-tools"></i> Reparations</a>
     <ul class="nav-dropdown-items">
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('need-checking') }}'><i class='nav-icon la la-desktop'></i> Need Checking</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('need-reparation') }}'><i class='nav-icon la la-address-card'></i> Need Reparation</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('ongoing-reparation') }}'><i class='nav-icon la la-address-card'></i> Ongoing Reparation</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('post-reparation-checking') }}'><i class='nav-icon la la-address-card'></i> Post-Reparation Checking</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('need-pickup') }}'><i class='nav-icon la la-address-card'></i> Need Pickup</a></li>
