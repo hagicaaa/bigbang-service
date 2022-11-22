@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\ServiceRequest;
+use App\Http\Requests\SparepartRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class ServiceCrudController
+ * Class SparepartCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class ServiceCrudController extends CrudController
+class SparepartCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class ServiceCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Service::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/service');
-        CRUD::setEntityNameStrings('service', 'services');
+        CRUD::setModel(\App\Models\Sparepart::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/sparepart');
+        CRUD::setEntityNameStrings('sparepart', 'spareparts');
     }
 
     /**
@@ -39,17 +39,18 @@ class ServiceCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-    
+        
         CRUD::addColumn([
             'name' => 'name',
             'label' => 'Name'
         ]);
 
         CRUD::addColumn([
-            'name' => 'price',
-            'label' => 'Price',
-            'prefix' => 'Rp '
+            'name' => 'qty',
+            'label' => 'Qty'
         ]);
+
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -65,21 +66,34 @@ class ServiceCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(ServiceRequest::class);
+        CRUD::setValidation(SparepartRequest::class);
 
         CRUD::addField([
             'name' => 'name',
+            'type' => 'text',
             'label' => 'Name',
-            'type' => 'text'
+        ]);
+
+        CRUD::addField([
+            'name' => 'part_number',
+            'type' => 'text',
+            'label' => 'Part Number',
+        ]);
+
+        CRUD::addField([
+            'name' => 'qty',
+            'type' => 'number',
+            'label' => 'Qty',
+            'suffix' => 'pcs'
         ]);
 
         CRUD::addField([
             'name' => 'price',
-            'label' => 'Price',
             'type' => 'number',
-            'prefix' => 'Rp'
+            'label' => 'Price',
+            'prefix' => 'Rp',
+            'attributes' => ["step" => "any"]
         ]);
-        
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
