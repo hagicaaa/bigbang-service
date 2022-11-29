@@ -214,7 +214,7 @@ class ReparationCrudController extends CrudController
             $computer->save();
     
             $reparation = new Reparation();
-            $reparation->inv_id = strtotime("now");
+            $reparation->reparation_id = strtotime("now");
             $reparation->computer_id = $computer->id;
             $reparation->customer_id = $customer->id;
             $reparation->received_by = backpack_user()->id;

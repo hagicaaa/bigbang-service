@@ -56,5 +56,9 @@ class RolesandPermissionsTableSeeder extends Seeder
             'name' => 'technician',
             'guard_name' => 'web'
         ]);
+        Role::create([
+            'name' => 'cashier',
+            'guard_name' => 'web'
+        ]);
     }
 }

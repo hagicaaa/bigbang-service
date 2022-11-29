@@ -29,6 +29,11 @@ class UsersTableSeeder extends Seeder
             'email' => 'tech@bigbang.com',
             'password' => bcrypt('12341234')
         ]);
+        User::create([
+            'name' => 'Cashier',
+            'email' => 'cashier@bigbang.com',
+            'password' => bcrypt('12341234')
+        ]);
 
         $admin = User::find(1);
         $admin->assignRole('admin');
@@ -36,5 +41,7 @@ class UsersTableSeeder extends Seeder
         $qc->assignRole('qc');
         $tech = User::find(3);
         $tech->assignRole('technician');
+        $cashier = User::find(4);
+        $cashier->assignRole('cashier');
     }
 }
