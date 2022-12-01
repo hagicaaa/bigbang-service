@@ -18,14 +18,20 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('need-checking', 'ReparationCrudController');
     Route::get('need-checking/{id}/done-inspection','ReparationCrudController@doneInspection');
+
     Route::crud('need-reparation', 'Reparation2CrudController');
     Route::get('need-reparation/{id}/start-repair', 'Reparation2CrudController@startRepair');
+
     Route::crud('ongoing-reparation', 'Reparation3CrudController');
     Route::get('ongoing-reparation/{id}/finish-repair', 'Reparation3CrudController@repairFinish');
+
     Route::crud('post-reparation-checking', 'Reparation4CrudController');
     Route::get('post-reparation-checking/{id}/finish-checking', 'Reparation4CrudController@finishChecking');
+    Route::get('post-reparation-checking/{id}/create-invoice', 'Reparation4CrudController@createInvoice');
+
     Route::crud('need-pickup', 'Reparation5CrudController');
     Route::get('need-pickup/{id}/picked-up', 'Reparation5CrudController@pickUp');
+    
     Route::crud('computer', 'ComputerCrudController');
     Route::crud('brand', 'BrandCrudController');
     Route::crud('customer', 'CustomerCrudController');
