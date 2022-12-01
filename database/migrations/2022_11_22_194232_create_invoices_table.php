@@ -15,7 +15,14 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_id');
+            $table->unsignedBigInteger('reparation_id');
+            $table->integer('total');
+            $table->boolean('payment_status');
+            $table->boolean('pickup_status');
             $table->timestamps();
+
+            $table->foreign('reparation_id')->references('id')->on('reparations');
         });
     }
 
