@@ -51,8 +51,8 @@ class ReparationCrudController extends CrudController
     {
         CRUD::addButtonFromView('line', 'done-inspection', 'done_inspection', 'beginning');
         CRUD::addColumn([
-            'label' => 'Invoice ID',
-            'name' => 'inv_id'
+            'label' => 'Reparation ID',
+            'name' => 'reparation_id'
         ]);
         CRUD::addColumn([
             'label' => 'Computer',

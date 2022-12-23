@@ -52,8 +52,8 @@ class Reparation5CrudController extends CrudController
     {
         CRUD::addButtonFromView('line', 'picked-up', 'pickup', 'beginning');
         CRUD::addColumn([
-            'label' => 'Invoice ID',
-            'name' => 'inv_id'
+            'label' => 'Reparation ID',
+            'name' => 'reparation_id'
         ]);
         CRUD::addColumn([
             'label' => 'Computer',

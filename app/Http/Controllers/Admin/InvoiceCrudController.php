@@ -63,7 +63,7 @@ class InvoiceCrudController extends CrudController
             'name' => 'reparation_id',
             'label' => 'Reparation ID',
             'type' => 'text',
-            'value' => $reparation_id
+            'value' => $reparation_id,
         ]);
         
         CRUD::addField([
