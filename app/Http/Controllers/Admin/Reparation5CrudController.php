@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Class Reparation5CrudController
@@ -39,7 +40,7 @@ class Reparation5CrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/need-pickup');
         CRUD::setEntityNameStrings('reparation', 'Need Pickup');
         CRUD::addClause('where', 'post_repair_inspection_date', '!=', NULL);
-        CRUD::addClause('where', 'paid_at', '!=', NULL);
+        CRUD::addClause('where', 'paid_at', '=', NULL);
     }
 
     /**
@@ -117,6 +118,7 @@ class Reparation5CrudController extends CrudController
     public function pickUp($id)
     {
         $reparation = Reparation::where('id', $id)->first();
+        $customer = Customer::where('id', $reparation->customer_id)->first();
         DB::beginTransaction();
         try{
             $reparation->paid_at = Carbon::now();
@@ -135,7 +137,13 @@ class Reparation5CrudController extends CrudController
             Log::error("Create failed", $error_data);
             \Alert::error("Create failed")->flash();
         }
-        \Alert::add('success', 'Data updated succesfully.')->flash();
-        return redirect(backpack_url('need-pickup'));
+        $response = Http::asForm()->post('http://localhost:3000/send', [
+            'phone' => '62'.$customer->phone.'@c.us',
+            'message' => 'Hai kak '.$customer->name.', komputermu sudah selesai kami cek dan sudah berfungsi dengan normal. Silakan datang ke workshop kami untuk melanjutkan pembayaran dan mengambil komputermu. Terimakasih sudah mempercayakan perbaikan komputermu kepada kami. Salam Bigbang!',
+        ]);
+        if($response->successful()){
+            \Alert::add('success', 'Data updated succesfully.')->flash();
+            return redirect(backpack_url('need-pickup'));
+        }
     }
 }

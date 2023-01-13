@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Class Reparation4CrudController
@@ -117,9 +118,10 @@ class Reparation4CrudController extends CrudController
     public function finishChecking($id)
     {
         $reparation = Reparation::where('id', $id)->first();
+        $customer = Customer::where('id', $reparation->customer_id)->first();
         DB::beginTransaction();
         try{
-            $reparation->post_reparation_inspection_date = Carbon::now();
+            $reparation->post_repair_inspection_date = Carbon::now();
             $reparation->save();
             DB::commit();
         } catch(\Exception $e){
@@ -134,7 +136,13 @@ class Reparation4CrudController extends CrudController
             Log::error("Create failed", $error_data);
             \Alert::error("Create failed")->flash();
         }
-        \Alert::add('success', 'Data updated succesfully.')->flash();
-        return redirect(backpack_url('post-reparation-checking'));
+        $response = Http::asForm()->post('http://localhost:3000/send', [
+            'phone' => '62'.$customer->phone.'@c.us',
+            'message' => 'Hai kak '.$customer->name.', komputermu sudah selesai kami cek dan sudah berfungsi dengan normal. Silakan datang ke workshop kami untuk melanjutkan pembayaran dan mengambil komputermu. Terimakasih sudah mempercayakan perbaikan komputermu kepada kami. Salam Bigbang!',
+        ]);
+        if($response->successful()){
+            \Alert::add('success', 'Data updated succesfully.')->flash();
+            return redirect(backpack_url('post-reparation-checking'));
+        }
     }
 }

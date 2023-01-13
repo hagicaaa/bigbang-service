@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Class ReparationCrudController
@@ -251,6 +252,8 @@ class ReparationCrudController extends CrudController
     public function doneInspection($id)
     {
         $reparation = Reparation::where('id', $id)->first();
+        $customer = Customer::where('id', $reparation->customer_id)->first();
+
         DB::beginTransaction();
         try{
             $reparation->inspection_date = Carbon::now();
@@ -268,7 +271,13 @@ class ReparationCrudController extends CrudController
             Log::error("Create failed", $error_data);
             \Alert::error("Create failed")->flash();
         }
-        \Alert::add('success', 'Data updated succesfully.')->flash();
-        return redirect(backpack_url('need-checking'));
+        $response = Http::asForm()->post('http://localhost:3000/send', [
+            'phone' => '62'.$customer->phone.'@c.us',
+            'message' => 'Hai kak '.$customer->name.', komputermu sudah selesai pengecekan nih. Teknisi kami akan segera menghubungi kamu secepatnya untuk detail kerusakan dan konfirmasi perbaikan. Salam Bigbang!',
+        ]);
+        if($response->successful()){
+            \Alert::add('success', 'Data updated succesfully.')->flash();
+            return redirect(backpack_url('need-checking'));
+        }
     }
 }

@@ -14,3 +14,5 @@ yarn-error.log
 /.idea
 /.vscode
 .DS_store
+/whatsapp-server/node_modules
+/whatsapp-server/.wwebjs_auth

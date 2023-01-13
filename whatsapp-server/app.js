@@ -4,6 +4,7 @@ const express = require('express');
 const qrcode = require('qrcode');
 const socketIO = require('socket.io');
 const http = require('http');
+const cors = require('cors')
 
 // initial instance
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,7 @@ const client = new Client({
     ],
   },
 });
+app.use(cors());
 
 // index routing and middleware
 app.use(express.json());
