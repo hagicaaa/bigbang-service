@@ -121,6 +121,7 @@ class Reparation2CrudController extends CrudController
         $customer = Customer::where('id', $reparation->customer_id)->first();
         DB::beginTransaction();
         try{
+            $reparation->repair_agree = 1;
             $reparation->repair_start = Carbon::now();
             $reparation->save();
             DB::commit();
@@ -139,6 +140,39 @@ class Reparation2CrudController extends CrudController
         $response = Http::asForm()->post('http://localhost:3000/send', [
             'phone' => '62'.$customer->phone.'@c.us',
             'message' => 'Hai kak '.$customer->name.', terimakasih sudah melakukan konfirmasi perbaikan. Teknisi kami akan segera memulai perbaikan. Salam Bigbang!',
+        ]);
+        if($response->successful()){
+            \Alert::add('success', 'Data updated succesfully.')->flash();
+            return redirect(backpack_url('need-reparation'));
+        }
+    }
+    public function cancelRepair($id)
+    {
+        $reparation = Reparation::where('id', $id)->first();
+        $customer = Customer::where('id', $reparation->customer_id)->first();
+        DB::beginTransaction();
+        try{
+            $reparation->repair_agree = 0;
+            $reparation->repair_start = Carbon::now();
+            $reparation->repair_finish = Carbon::now();
+            $reparation->post_repair_inspection_date = Carbon::now();
+            $reparation->save();
+            DB::commit();
+        } catch(\Exception $e){
+            DB::rollBack();
+
+            //set error data for error log
+            $error_data = [];
+            $error_data["function"] = "cancelRepair";
+            $error_data["controller"] = "ReparationCrudController";
+            $error_data["message"] = $e->getMessage();
+
+            Log::error("Create failed", $error_data);
+            \Alert::error("Create failed")->flash();
+        }
+        $response = Http::asForm()->post('http://localhost:3000/send', [
+            'phone' => '62'.$customer->phone.'@c.us',
+            'message' => 'Hai kak '.$customer->name.', terimakasih sudah melakukan konfirmasi pembatalan perbaikan. Komputer anda dapat segera diambil. Salam Bigbang!',
         ]);
         if($response->successful()){
             \Alert::add('success', 'Data updated succesfully.')->flash();

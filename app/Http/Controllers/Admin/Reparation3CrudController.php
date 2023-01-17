@@ -138,7 +138,7 @@ class Reparation3CrudController extends CrudController
         }
         $response = Http::asForm()->post('http://localhost:3000/send', [
             'phone' => '62'.$customer->phone.'@c.us',
-            'message' => 'Hai kak '.$customer->name.', komputermu sudah selesai perbaikan nih. Kami akan mengecek ulang komputermu untuk memastikan masalah sudah teratasi. Salam Bigbang!',
+            'message' => 'Hai kak '.$customer->name.', komputer anda sudah selesai kami perbaiki. Kami akan mengecek ulang komputer anda untuk memastikan masalah sudah teratasi. Salam Bigbang!',
         ]);
         if($response->successful()){
             \Alert::add('success', 'Data updated succesfully.')->flash();

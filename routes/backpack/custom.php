@@ -21,6 +21,7 @@ Route::group([
 
     Route::crud('need-reparation', 'Reparation2CrudController');
     Route::get('need-reparation/{id}/start-repair', 'Reparation2CrudController@startRepair');
+    Route::get('need-reparation/{id}/cancel-repair', 'Reparation2CrudController@cancelRepair');
 
     Route::crud('ongoing-reparation', 'Reparation3CrudController');
     Route::get('ongoing-reparation/{id}/finish-repair', 'Reparation3CrudController@repairFinish');

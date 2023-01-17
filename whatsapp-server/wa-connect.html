@@ -32,7 +32,6 @@
       <div class="row mt-3">
         <div class="col text-center">
           <h1>Login to WhatsApp</h1>
-          <h2 id="status">Status : Not Connected</h2>
           <img class="img-fluid" src="https://cdn.contentfun.net/files/upload/content/322052eb1cab393f4d7e2f37077d78ea.png" alt="" id="qrcode">
           <h4>Scan me</h4>
           <p class="text-muted">wait until QR Code show</p>
@@ -63,9 +62,6 @@
         socket.on('qr', function(qr) {
           $("#qrcode").attr("src", qr);
         });
-        if(isConnected = 1){
-            str.replace(/Not Connected/g, "Connected");
-        }
       });
     </script>
 </body>
