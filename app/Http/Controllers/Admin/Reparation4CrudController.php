@@ -28,6 +28,7 @@ class Reparation4CrudController extends CrudController
     // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     // use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \App\Http\Controllers\Admin\Operations\InvoiceOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.

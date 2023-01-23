@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\InvoiceRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Class InvoiceCrudController
@@ -54,11 +56,16 @@ class InvoiceCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
+
+     public function getReparationId(Request $request)
+     {
+        $request->input('create_invoice');
+     }
     protected function setupCreateOperation()
     {
         CRUD::setValidation(InvoiceRequest::class);
 
-        $reparation_id = 123;
+        $reparation_id = getReparationId();
         CRUD::addField([
             'name' => 'reparation_id',
             'label' => 'Reparation ID',
