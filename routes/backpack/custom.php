@@ -31,6 +31,10 @@ Route::group([
 
     Route::crud('need-pickup', 'Reparation5CrudController');
     Route::get('need-pickup/{id}/picked-up', 'Reparation5CrudController@pickUp');
+
+    Route::get('api/service', 'App\Http\Controllers\Api\ApiController@index');
+    Route::get('api/service/{id}', 'App\Http\Controllers\Api\ApiController@show');
+
     
     Route::crud('computer', 'ComputerCrudController');
     Route::crud('brand', 'BrandCrudController');

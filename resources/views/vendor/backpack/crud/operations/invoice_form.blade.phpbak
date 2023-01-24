@@ -65,11 +65,14 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                         <label>Type</label>
                         <input type="text" name="type" value="{{ $computer_data->type }}" readonly="readonly" disabled="disabled" class="form-control">
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-12">
                         <label>Problem</label>
                         <input type="text" name="problem" value="{{ $computer_data->problem }}" readonly="readonly" disabled="disabled" class="form-control">
                     </div>
-                    
+                    <div class="form-group col-md-12">
+                        <label>Item(s)</label>
+                        
+                    </div>
                 </div>
             </div>
             <div class="d-none" id="parentLoadedAssets">[]</div>

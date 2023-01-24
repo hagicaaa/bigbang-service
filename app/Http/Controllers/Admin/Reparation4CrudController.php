@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Class Reparation4CrudController
@@ -73,7 +74,7 @@ class Reparation4CrudController extends CrudController
         ]);
         CRUD::addColumn([
             'label' => 'Received by',
-            'name' =>'received_by',
+            'name' => 'received_by',
             'type' => 'select',
             'entity' => 'receivedBy', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
@@ -105,6 +106,67 @@ class Reparation4CrudController extends CrudController
          */
     }
 
+    protected function setupInvoiceOperation()
+    {
+        $reparation_data = Reparation::where('id',\Route::current()->parameter('id'))->first();
+        CRUD::addField([
+            'name' => 'reparation_id',
+            'label' => 'Reparation ID',
+            'type' => 'text',
+            'value' => $reparation_data->reparation_id,
+        ]);
+
+        CRUD::addField([
+            'name' => 'invoice_id',
+            'label' => 'Invoice ID',
+            'type' => 'text',
+            'value' => "INV-".strtotime("now"),
+        ]);
+
+        CRUD::addField([
+            'name'  => 'invoiceDetails',
+            'label' => 'Item',
+            'type'  => 'repeatable',
+            'fields' => [
+                [
+                    'name'    => 'category',
+                    'type'    => 'select_from_array',
+                    'options' => ['sparepart' => 'Sparepart', 'service' => 'Service'],
+                    'label'   => 'Category',
+                    'allows_null' => false,
+                    'wrapper' => ['class' => 'form-group col-md-3'],
+                ],
+                [
+                    'name'    => 'item',
+                    // 'type'    => 'select2_from_ajax',
+                    'label'   => 'Item',
+                    // 'data_source' => url('api/service'),
+                    // 'attribute' => 'name',
+                    // 'wrapper' => ['class' => 'form-group col-md-4'],
+                ],
+                [
+                    'name'    => 'qty',
+                    'type'    => 'number',
+                    'label'   => 'Qty',
+                    'wrapper' => ['class' => 'form-group col-md-2'],
+                ],
+                [
+                    'name'    => 'price',
+                    'type'    => 'number',
+                    'label'   => 'Price',
+                    'wrapper' => ['class' => 'form-group col-md-3'],
+                ],
+            ],
+        ]);
+        CRUD::addSaveAction([
+            'name' => 'create_invoice',
+            'redirect' => function ($crud, $request, $itemId) {
+                return $crud->route;
+            },
+            'button_text' => 'Create Invoice',
+        ]);
+    }
+
     /**
      * Define what happens when the Update operation is loaded.
      * 
@@ -121,11 +183,11 @@ class Reparation4CrudController extends CrudController
         $reparation = Reparation::where('id', $id)->first();
         $customer = Customer::where('id', $reparation->customer_id)->first();
         DB::beginTransaction();
-        try{
+        try {
             $reparation->post_repair_inspection_date = Carbon::now();
             $reparation->save();
             DB::commit();
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
 
             //set error data for error log
@@ -138,10 +200,10 @@ class Reparation4CrudController extends CrudController
             \Alert::error("Create failed")->flash();
         }
         $response = Http::asForm()->post('http://localhost:3000/send', [
-            'phone' => '62'.$customer->phone.'@c.us',
-            'message' => 'Hai kak '.$customer->name.', komputer anda sudah selesai kami cek dan sudah berfungsi normal. Silakan datang ke toko kami untuk melanjutkan pembayaran dan mengambil komputer anda. Terimakasih sudah mempercayakan perbaikan komputer kepada kami. Salam Bigbang!',
+            'phone' => '62' . $customer->phone . '@c.us',
+            'message' => 'Hai kak ' . $customer->name . ', komputer anda sudah selesai kami cek dan sudah berfungsi normal. Silakan datang ke toko kami untuk melanjutkan pembayaran dan mengambil komputer anda. Terimakasih sudah mempercayakan perbaikan komputer kepada kami. Salam Bigbang!',
         ]);
-        if($response->successful()){
+        if ($response->successful()) {
             \Alert::add('success', 'Data updated succesfully.')->flash();
             return redirect(backpack_url('post-reparation-checking'));
         }
