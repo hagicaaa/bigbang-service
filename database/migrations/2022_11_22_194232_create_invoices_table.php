@@ -17,9 +17,10 @@ class CreateInvoicesTable extends Migration
             $table->id();
             $table->string('invoice_id');
             $table->unsignedBigInteger('reparation_id');
-            $table->integer('total');
-            $table->boolean('payment_status');
-            $table->boolean('pickup_status');
+            $table->integer('total')->nullable();
+            $table->string('invoice_pdf_dir')->nullable();
+            $table->boolean('payment_status')->nullable();
+            $table->boolean('pickup_status')->nullable();
             $table->timestamps();
 
             $table->foreign('reparation_id')->references('id')->on('reparations');

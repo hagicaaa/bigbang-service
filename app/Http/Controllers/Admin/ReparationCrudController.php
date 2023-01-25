@@ -100,6 +100,9 @@ class ReparationCrudController extends CrudController
             'name' => 'name',
             'type' => 'text',
             'label' => 'Customer Name',
+            'wrapper' => [
+                'class' => 'form-group col-md-6',
+            ]
         ]);
 
         CRUD::addField([
@@ -107,15 +110,6 @@ class ReparationCrudController extends CrudController
             'type' => 'text',
             'label' => 'Phone',
             'prefix' => '+62',
-            'wrapper' => [
-                'class' => 'form-group col-md-6',
-            ]
-        ]);
-
-        CRUD::addField([
-            'name' => 'email',
-            'type' => 'text',
-            'label' => 'Email',
             'wrapper' => [
                 'class' => 'form-group col-md-6',
             ]
@@ -202,7 +196,6 @@ class ReparationCrudController extends CrudController
             $customer = new Customer();
             $customer->name = $request->get('name');
             $customer->phone = $request->get('phone');
-            $customer->email = $request->get('email');
             $customer->save();
     
             $computer = new Computer();
