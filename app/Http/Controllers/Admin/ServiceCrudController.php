@@ -46,6 +46,16 @@ class ServiceCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
+            'name' => 'category',
+            'label' => 'Category'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'qty',
+            'label' => 'Qty'
+        ]);
+
+        CRUD::addColumn([
             'name' => 'price',
             'label' => 'Price',
             'prefix' => 'Rp '
@@ -69,15 +79,38 @@ class ServiceCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'name',
+            'type' => 'text',
             'label' => 'Name',
-            'type' => 'text'
+        ]);
+
+        CRUD::addField([
+            'name' => 'category',
+            'label' => "Category",
+            'type' => 'select_from_array',
+            'options' => ['service' => 'Service', 'sparepart' => 'Sparepart'],
+            'allows_null' => false,
+            'default' => 'service',
+        ]);
+
+        CRUD::addField([
+            'name' => 'part_number',
+            'type' => 'text',
+            'label' => 'Part Number',
+        ]);
+
+        CRUD::addField([
+            'name' => 'qty',
+            'type' => 'number',
+            'label' => 'Qty',
+            'suffix' => 'pcs'
         ]);
 
         CRUD::addField([
             'name' => 'price',
-            'label' => 'Price',
             'type' => 'number',
-            'prefix' => 'Rp'
+            'label' => 'Price',
+            'prefix' => 'Rp',
+            'attributes' => ["step" => "any"]
         ]);
         
 

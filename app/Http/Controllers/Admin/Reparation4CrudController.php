@@ -148,6 +148,7 @@ class Reparation4CrudController extends CrudController
                     'name'    => 'qty',
                     'type'    => 'number',
                     'label'   => 'Qty',
+                    'default' => 1,
                     'wrapper' => ['class' => 'form-group col-md-2'],
                 ],
                 [
