@@ -28,12 +28,14 @@ Route::group([
 
     Route::crud('post-reparation-checking', 'Reparation4CrudController');
     Route::get('post-reparation-checking/{id}/finish-checking', 'Reparation4CrudController@finishChecking');
+    Route::get('post-reparation-checking/{id}/invoice/create', 'Reparation4CrudController@createInvoice');
+    Route::post('post-reparation-checking/{id}/invoice/add-item', 'Reparation4CrudController@addItemtoInvoice')->name('add-item');
+
 
     Route::crud('need-pickup', 'Reparation5CrudController');
     Route::get('need-pickup/{id}/picked-up', 'Reparation5CrudController@pickUp');
 
-    Route::get('api/service', 'App\Http\Controllers\Api\ApiController@index');
-    Route::get('api/service/{id}', 'App\Http\Controllers\Api\ApiController@show');
+
 
     
     Route::crud('computer', 'ComputerCrudController');

@@ -57,20 +57,15 @@ class InvoiceCrudController extends CrudController
      * @return void
      */
 
-     public function getReparationId(Request $request)
-     {
-        $request->input('create_invoice');
-     }
     protected function setupCreateOperation()
     {
         CRUD::setValidation(InvoiceRequest::class);
 
-        $reparation_id = getReparationId();
         CRUD::addField([
             'name' => 'reparation_id',
             'label' => 'Reparation ID',
             'type' => 'text',
-            'value' => $reparation_id,
+            'value' => 12123,
         ]);
         
         CRUD::addField([
@@ -130,8 +125,10 @@ class InvoiceCrudController extends CrudController
 
     public function store()
     {
-        $request = $this->crud->getRequest()->request;
-        dd($request);
+        $request = $this->crud->getRequest()->request->all();
+        $inv_det = json_decode($request['invoiceDetails']);
+        print_r($inv_det[0]->category);
+        die();
     }
     protected function setupUpdateOperation()
     {

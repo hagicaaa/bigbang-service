@@ -25,7 +25,7 @@ trait InvoiceOperation
         
         Route::post($segment . '/{id}/invoice', [
             'as'        => $routeName . '.create-invoice',
-            'uses'      => $controller . '@postInvoiceForm',
+            'uses'      => $controller . '@invoice',
             'operation' => 'invoice',
         ]);
             
@@ -45,7 +45,7 @@ trait InvoiceOperation
 
         $this->crud->operation('list', function () {
             // $this->crud->addButton('top', 'invoice', 'view', 'crud::buttons.invoice');
-            $this->crud->addButton('line', 'invoice', 'view', 'crud::buttons.create_invoice');
+            $this->crud->addButton('line', 'invoice', 'view', 'crud::buttons.create_invoice_detail');
         });
     }
 
@@ -54,59 +54,59 @@ trait InvoiceOperation
      *
      * @return Response
      */
-    // public function invoice()
-    // {
-    //     $this->crud->hasAccessOrFail('invoice');
+    public function invoice()
+    {
+        $this->crud->hasAccessOrFail('invoice');
 
-    //     // prepare the fields you need to show
-    //     $this->data['crud'] = $this->crud;
-    //     $this->data['title'] = $this->crud->getTitle() ?? 'Invoice '.$this->crud->entity_name;
-    //     $this->data['entry'] = $this->crud->getCurrentEntry();
-    //     $this->data['customer_data'] = Customer::where('id',$this->data['entry']->customer_id)->first();
-    //     $this->data['computer_data'] = Computer::where('id',$this->data['entry']->customer_id)->first();
+        // prepare the fields you need to show
+        $this->data['crud'] = $this->crud;
+        $this->data['title'] = $this->crud->getTitle() ?? 'Invoice '.$this->crud->entity_name;
+        $this->data['entry'] = $this->crud->getCurrentEntry();
+        $this->data['customer_data'] = Customer::where('id',$this->data['entry']->customer_id)->first();
+        $this->data['computer_data'] = Computer::where('id',$this->data['entry']->customer_id)->first();
 
-    //     // load the view
-    //     return view("crud::invoice_form", $this->data);
-    // }
+        // load the view
+        return view("crud::invoice_form", $this->data);
+    }
 
     public function getInvoiceForm(){
         $this->crud->hasAccessOrFail('invoice');
     
         $this->crud->setHeading('Create Invoice');
-        $this->crud->setSubHeading('Create Invoice');
+        $this->crud->setSubHeading('for Reparation '.$this->crud->getCurrentEntry()->reparation_id);
     
         $this->data['crud'] = $this->crud;
         $this->data['entry'] = $this->crud->getCurrentEntry();
         $this->data['saveAction'] = $this->crud->getSaveAction();
         $this->data['title'] = $this->crud->getTitle() ?? 'Invoice '.$this->crud->entity_name;
         $this->data['customer_data'] = Customer::where('id',$this->data['entry']->customer_id)->first();
-        $this->data['computer_data'] = Computer::where('id',$this->data['entry']->customer_id)->first();
+        $this->data['computer_data'] = Computer::where('id',$this->data['entry']->computer_id)->first();
     
-        return view('crud::invoice_form', $this->data);
+        return view('crud::operations.invoice_form', $this->data);
     }
 
-    public function postInvoiceForm(){
-        $this->crud->hasAccessOrFail('invoice');
-        $request = $this->crud->validateRequest();
+    // public function postInvoiceForm(){
+    //     $this->crud->hasAccessOrFail('invoice');
+    //     $request = $this->crud->validateRequest();
     
-        $entry = $this->crud->getCurrentEntry();
-        try {
-            // send the actual email
-            Invoice::raw($request['invoice'], function ($invoice) use ($entry, $request) {
-                $invoice->from($request->from);
-                $invoice->replyTo($request->reply_to);
-                $invoice->to($entry->email, $entry->name);
-                $invoice->subject($request['subject']);
-            });
+    //     $entry = $this->crud->getCurrentEntry();
+    //     try {
+    //         // send the actual email
+    //         Invoice::raw($request['invoice'], function ($invoice) use ($entry, $request) {
+    //             $invoice->from($request->from);
+    //             $invoice->replyTo($request->reply_to);
+    //             $invoice->to($entry->email, $entry->name);
+    //             $invoice->subject($request['subject']);
+    //         });
     
-            Alert::success('Mail Sent')->flash();
+    //         Alert::success('Mail Sent')->flash();
     
-            return redirect(url($this->crud->route));
-        } catch (Exception $e) {
-            // show a bubble with the error message
-            Alert::error("Error, " . $e->getMessage())->flash();
+    //         return redirect(url($this->crud->route));
+    //     } catch (Exception $e) {
+    //         // show a bubble with the error message
+    //         Alert::error("Error, " . $e->getMessage())->flash();
     
-            return redirect()->back()->withInput();
-        }
-    }
+    //         return redirect()->back()->withInput();
+    //     }
+    // }
 }

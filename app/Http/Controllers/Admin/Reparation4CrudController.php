@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\ReparationRequest;
 use App\Models\Computer;
 use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\InvoiceDetail;
 use App\Models\Reparation;
+use App\Models\Service;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Response;
@@ -16,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Prologue\Alerts\Facades\Alert;
 
 /**
  * Class Reparation4CrudController
@@ -53,6 +57,11 @@ class Reparation4CrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $invoice = Invoice::where('reparation_id', 1)->first();
+        if(!$invoice){
+            CRUD::removeButton('create_invoice_detail');
+            CRUD::addButtonFromView('line', 'create_invoice', 'create_invoice', 'beginning');
+        }
         CRUD::addButtonFromView('line', 'finish-checking', 'done_checking', 'beginning');
         CRUD::addColumn([
             'label' => 'Reparation ID',
@@ -106,67 +115,181 @@ class Reparation4CrudController extends CrudController
          */
     }
 
-    protected function setupInvoiceOperation()
+    public function createInvoice($id)
     {
-        $reparation_data = Reparation::where('id',\Route::current()->parameter('id'))->first();
-        CRUD::addField([
-            'name' => 'reparation_id',
-            'label' => 'Reparation ID',
-            'type' => 'text',
-            'value' => $reparation_data->reparation_id,
-        ]);
-
-        CRUD::addField([
-            'name' => 'invoice_id',
-            'label' => 'Invoice ID',
-            'type' => 'text',
-            'value' => "INV-".strtotime("now"),
-        ]);
-
-        CRUD::addField([
-            'name'  => 'invoiceDetails',
-            'label' => 'Item',
-            'type'  => 'repeatable',
-            'fields' => [
-                [
-                    'name'    => 'category',
-                    'type'    => 'select_from_array',
-                    'options' => ['sparepart' => 'Sparepart', 'service' => 'Service'],
-                    'label'   => 'Category',
-                    'allows_null' => false,
-                    'wrapper' => ['class' => 'form-group col-md-3'],
-                ],
-                [
-                    'name'    => 'item',
-                    // 'type'    => 'select2_from_ajax',
-                    'label'   => 'Item',
-                    // 'data_source' => url('api/service'),
-                    // 'attribute' => 'name',
-                    // 'wrapper' => ['class' => 'form-group col-md-4'],
-                ],
-                [
-                    'name'    => 'qty',
-                    'type'    => 'number',
-                    'label'   => 'Qty',
-                    'default' => 1,
-                    'wrapper' => ['class' => 'form-group col-md-2'],
-                ],
-                [
-                    'name'    => 'price',
-                    'type'    => 'number',
-                    'label'   => 'Price',
-                    'wrapper' => ['class' => 'form-group col-md-3'],
-                ],
-            ],
-        ]);
-        CRUD::addSaveAction([
-            'name' => 'create_invoice',
-            'redirect' => function ($crud, $request, $itemId) {
-                return $crud->route;
-            },
-            'button_text' => 'Create Invoice',
-        ]);
+        $reparation_data = Reparation::where('id', $id)->first();
+        $invoice_data = Invoice::where('reparation_id', $id)->first();
+        if($invoice_data == NULL){
+            $invoice = Invoice::create([
+                'invoice_id' => 'INV-'.$reparation_data->reparation_id,
+                'reparation_id' => $reparation_data->id,
+            ]);
+            \Alert::add('success', 'Invoice created succesfully!')->flash();
+            return redirect(backpack_url('post-reparation-checking'));
+        }
+        else{
+            \Alert::error("Data already exist!")->flash();
+            return redirect(backpack_url('post-reparation-checking'));
+        }
     }
+
+    public function addItemtoInvoice(Request $request)
+    {
+        $data = $request->all();
+
+        $service_price = Service::where('id',$data['item'])->value('price');
+        $total = $service_price * $data['qty'];
+        $invoice = Invoice::where('reparation_id', $data['id'])->first();
+        DB::beginTransaction();
+        try{
+            $invoice_detail = new InvoiceDetail;
+            $invoice_detail->invoice_id = $invoice->id;
+            $invoice_detail->service_id = $data['item'];
+            $invoice_detail->qty = $data['qty'];
+            $invoice_detail->price = $total;
+            $invoice_detail->save();
+            DB::commit();
+        } catch(\Exception $e){
+            DB::rollBack();
+
+            //set error data for error log
+            $error_data = [];
+            $error_data["function"] = "addItemtoInvoice";
+            $error_data["controller"] = "Reparation4CrudController";
+            $error_data["message"] = $e->getMessage();
+
+            Log::error("Create failed", $error_data);
+            return response()->json($error_data);
+        }
+     
+        return response()->json(['success'=>'Item successfully added!']);
+    }
+
+    // protected function setupInvoiceOperation()
+    // {
+    //     $reparation_data = Reparation::where('id',\Route::current()->parameter('id'))->first();
+    //     $customer_data = Customer::where('id',$reparation_data->customer_id)->first();
+    //     $computer_data = Computer::where('id',$reparation_data->computer_id)->first();
+
+    //     CRUD::addField([
+    //         'name' => 'invoice_id',
+    //         'label' => 'Invoice ID',
+    //         'type' => 'text',
+    //         'value' => "INV-".$reparation_data->reparation_id,
+    //         'wrapper' => ['class' => 'form-group col-md-4'],
+    //         'attributes' => [
+    //             'readonly'  => 'readonly',
+    //         ],
+    //         // 'value' => url('admin/api/service')
+    //     ]);
+
+    //     CRUD::addField([
+    //         'name' => 'customer_name',
+    //         'label' => 'Customer',
+    //         'type' => 'text',
+    //         'value' => $customer_data->name,
+    //         'wrapper' => ['class' => 'form-group col-md-4'],
+    //         'attributes' => [
+    //             'readonly'  => 'readonly',
+    //         ],
+    //     ]);
+        
+    //     CRUD::addField([
+    //         'name' => 'phone_number',
+    //         'label' => 'Phone',
+    //         'type' => 'text',
+    //         'prefix' => "+62",
+    //         'value' => $customer_data->phone,
+    //         'wrapper' => ['class' => 'form-group col-md-4'],
+    //         'attributes' => [
+    //             'readonly'  => 'readonly',
+    //         ],
+    //     ]);
+
+    //     CRUD::addField([
+    //         'name' => 'laptop_brand',
+    //         'label' => 'Brand',
+    //         'type' => 'text',
+    //         'value' => $computer_data->brand,
+    //         'wrapper' => ['class' => 'form-group col-md-6'],
+    //         'attributes' => [
+    //             'readonly'  => 'readonly',
+    //         ],
+    //     ]);
+
+    //     CRUD::addField([
+    //         'name' => 'laptop_type',
+    //         'label' => 'Type',
+    //         'type' => 'text',
+    //         'value' => $computer_data->type,
+    //         'wrapper' => ['class' => 'form-group col-md-6'],
+    //         'attributes' => [
+    //             'readonly'  => 'readonly',
+    //         ],
+    //     ]);
+
+    //     CRUD::addField([
+    //         'name' => 'laptop_problem',
+    //         'label' => 'Problem',
+    //         'type' => 'text',
+    //         'value' => $computer_data->problem,
+    //         'wrapper' => ['class' => 'form-group col-md-12'],
+    //         'attributes' => [
+    //             'readonly'  => 'readonly',
+    //         ],
+    //     ]);
+
+    //     CRUD::addField([
+    //         'name'  => 'invoiceDetails',
+    //         'label' => 'Item(s)',
+    //         'type'  => 'repeatable',
+    //         'fields' => [
+    //             // [
+    //             //     'name'    => 'category',
+    //             //     'type'    => 'select_from_array',
+    //             //     'options' => ['sparepart' => 'Sparepart', 'service' => 'Service'],
+    //             //     'label'   => 'Category',
+    //             //     'allows_null' => false,
+    //             //     'wrapper' => ['class' => 'form-group col-md-3'],
+    //             // ],
+    //             [
+    //                 'name'    => 'item',
+    //                 'type'    => 'select2_from_ajax',
+    //                 'label'   => 'Item',
+    //                 'include_all_form_fields' => true,
+    //                 'model' => "App\Models\Service",
+    //                 'placeholder' => "Select item",
+    //                 'data_source' => url('api/service'),
+    //                 'minimum_input_length' => 1,
+    //                 'attribute' => 'name',
+    //                 'wrapper' => ['class' => 'form-group col-md-7'],
+    //             ],
+    //             [
+    //                 'name'    => 'qty',
+    //                 'type'    => 'number',
+    //                 'label'   => 'Qty',
+    //                 'default' => 1,
+    //                 'wrapper' => ['class' => 'form-group col-md-2'],
+    //             ],
+    //             [
+    //                 'name'    => 'price',
+    //                 'type'    => 'number',
+    //                 'label'   => 'Price',
+    //                 'attributes' => [
+    //                     'readonly'  => 'readonly',
+    //                 ],
+    //                 'wrapper' => ['class' => 'form-group col-md-3 price'],
+    //             ],
+    //         ],
+    //     ]);
+    //     CRUD::addSaveAction([
+    //         'name' => 'create_invoice',
+    //         'redirect' => function ($crud, $request, $itemId) {
+    //             return $crud->route;
+    //         },
+    //         'button_text' => 'Create Invoice',
+    //     ]);
+    // }
 
     /**
      * Define what happens when the Update operation is loaded.

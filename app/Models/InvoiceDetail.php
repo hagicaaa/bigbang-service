@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Invoice extends Model
+class InvoiceDetail extends Model
 {
     use CrudTrait;
 
@@ -15,11 +15,11 @@ class Invoice extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'invoices';
+    protected $table = 'invoice_details';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['invoice_id','reparation_id','total','invoice_pdf_dir','payment_status','pickup_status'];
+    protected $fillable = ['invoice_id','service_id','qty','price'];
     // protected $hidden = [];
     // protected $dates = [];
 

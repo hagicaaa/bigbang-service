@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/admin');
 Route::view('/cek-reparasi','welcome');
+Route::get('api/service', 'App\Http\Controllers\Api\ApiController@index');
+Route::get('api/service/{id}', 'Api\ApiController@show');
 Route::group([
     'prefix' => config('backpack.base.route_prefix', 'admin'),
     'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
@@ -23,4 +26,5 @@ Route::group([
     Route::crud('user', 'UserCrudController');
     Route::crud('role', 'RoleCrudController');
     Route::crud('permission', 'PermissionCrudController');
+
 });

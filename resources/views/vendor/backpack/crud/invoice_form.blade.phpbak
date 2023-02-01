@@ -50,6 +50,8 @@
 		  </form>
 	</div>
 </div>
-
+@endsection
+@section('scripts')
+<script src="{{ asset('js/invoice_item.js') }}"></script>
 @endsection
 
