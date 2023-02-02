@@ -142,12 +142,20 @@ class Reparation4CrudController extends CrudController
         $invoice = Invoice::where('reparation_id', $data['id'])->first();
         DB::beginTransaction();
         try{
+            //add data to invoicedetail
             $invoice_detail = new InvoiceDetail;
             $invoice_detail->invoice_id = $invoice->id;
             $invoice_detail->service_id = $data['item'];
             $invoice_detail->qty = $data['qty'];
             $invoice_detail->price = $total;
             $invoice_detail->save();
+
+            //count total
+            $total_all = InvoiceDetail::where('invoice_id', $invoice->id)->sum('price');
+
+            $invoice->total = $total_all;
+            $invoice->save();
+
             DB::commit();
         } catch(\Exception $e){
             DB::rollBack();

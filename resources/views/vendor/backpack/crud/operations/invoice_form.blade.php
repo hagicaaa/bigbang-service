@@ -137,7 +137,7 @@
     </div>
 @endsection
 @push('crud_fields_styles')
-    type="text/css" />
+    
 @endpush
 @push('crud_fields_scripts')
 @endpush
