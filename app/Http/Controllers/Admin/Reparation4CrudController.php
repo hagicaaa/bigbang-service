@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Prologue\Alerts\Facades\Alert;
+use Datatables;
 
 /**
  * Class Reparation4CrudController
@@ -146,7 +147,7 @@ class Reparation4CrudController extends CrudController
             $invoice_detail = new InvoiceDetail;
             $invoice_detail->invoice_id = $invoice->id;
             $invoice_detail->service_id = $data['item'];
-            $invoice_detail->qty = $data['qty'];
+            $invoice_detail->item_qty = $data['qty'];
             $invoice_detail->price = $total;
             $invoice_detail->save();
 

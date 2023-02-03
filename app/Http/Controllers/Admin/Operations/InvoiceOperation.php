@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Operations;
 use Illuminate\Support\Facades\Route;
 use App\Models\Customer;
 use App\Models\Computer;
+use App\Models\Invoice;
+use App\Models\InvoiceDetail;
 
 trait InvoiceOperation
 {
@@ -79,8 +81,12 @@ trait InvoiceOperation
         $this->data['entry'] = $this->crud->getCurrentEntry();
         $this->data['saveAction'] = $this->crud->getSaveAction();
         $this->data['title'] = $this->crud->getTitle() ?? 'Invoice '.$this->crud->entity_name;
-        $this->data['customer_data'] = Customer::where('id',$this->data['entry']->customer_id)->first();
-        $this->data['computer_data'] = Computer::where('id',$this->data['entry']->computer_id)->first();
+        $this->data['customer_data'] = Customer::where('id', $this->data['entry']->customer_id)->first();
+        $this->data['computer_data'] = Computer::where('id', $this->data['entry']->computer_id)->first();
+        $this->data['invoice'] = Invoice::where('reparation_id', $this->data['entry']->id)->first();
+        $this->data['invoice_details'] = InvoiceDetail::where('invoice_id', $this->data['invoice']->id)
+        ->join('services','services.id','=','service_id')
+        ->get();
     
         return view('crud::operations.invoice_form', $this->data);
     }

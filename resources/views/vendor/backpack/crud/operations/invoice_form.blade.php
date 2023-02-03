@@ -96,32 +96,36 @@
                             <thead>
                                 <tr>
                                     <th style="width:5%">No.</th>
-                                    <th style="width:70%">Item</th>
+                                    <th style="width:60%">Item</th>
                                     <th style="width:10%">Qty</th>
+                                    <th style="width:10%">Price</th>
                                     <th style="width:15%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($invoice_details as $item)
                                 <tr>
-                                    <th>1</th>
-                                    <th>Ganti pasta</th>
-                                    <th>1</th>
-                                    <th>Del</th>
+                                    <th style="width:5%">{{ $loop->iteration }}</th>
+                                    <th style="width:60%">{{ $item->name }}</th>
+                                    <th style="width:10%">{{ $item->item_qty }}</th>
+                                    <th style="width:10%">Rp {{ $item->price }}</th>
+                                    <th style="width:15%">Delete</th>
                                 </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th style="width:5%">No.</th>
-                                    <th style="width:70%">Item</th>
-                                    <th style="width:10%">Qty</th>
-                                    <th style="width:15%">Action</th>
+                                    <th style="width:5%">.</th>
+                                    <th style="width:60%"></th>
+                                    <th style="width:10%">Total</th>
+                                    <th style="width:25%">Rp {{ $invoice->total }}</th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
                 <div class="d-none" id="parentLoadedAssets">[]</div>
-                <div id="saveActions" class="form-group">
+                {{-- <div id="saveActions" class="form-group">
                     <input type="hidden" name="_save_action" value="send_email">
                     <button type="submit" class="btn btn-success">
                         <span class="la la-save" role="presentation" aria-hidden="true"></span> &nbsp;
@@ -131,20 +135,33 @@
                     </div>
                     <a href="{{ url($crud->route) }}" class="btn btn-default"><span class="la la-ban"></span>
                         &nbsp;Cancel</a>
-                </div>
+                </div> --}}
             </form>
         </div>
     </div>
 @endsection
 @push('crud_fields_styles')
-    
+
 @endpush
 @push('crud_fields_scripts')
 @endpush
 @section('after_scripts')
+
     <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
     <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet" />
+    <!-- Datatables js -->
+<script type="text/javascript" src="{{ asset('packages/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('packages/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('packages/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('packages/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('packages/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('packages/datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4.min.js') }}"></script>
+
+<!-- Backpack js -->
+<script src="{{ asset('packages/backpack/crud/js/crud.js') }}"></script>
+<script src="{{ asset('packages/backpack/crud/js/form.js') }}"></script>
+<script src="{{ asset('packages/backpack/crud/js/list.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $.ajaxSetup({
@@ -192,6 +209,7 @@
                     },
                     success: function(result) {
                         alert(result.success);
+                        location.reload();
                     },
                     error: function(result) {
                         alert(result);
@@ -200,5 +218,29 @@
 
             });
         });
+
+        // $("#invoice-table").DataTable({
+        //     ajax: "{{ url('admin/post-reparation-checking/' . $entry->id . '/invoice/list') }}"
+            // responsive: false,
+            // columnDefs: [
+            //     { width: "5%", orderable: false, targets: 0 },
+            //     { width: "25%", targets: 1 },
+            //     { width: "20%", targets: 2 },
+            //     { width: "10%", targets: 3 },
+            //     { width: "40%", targets: 4 },
+            // ],
+            // columns: [
+            //     {data: "id", name: 'id'},
+
+            //     {data: 'name', name: 'name'},
+
+            //     {data: 'qty', name: 'qty'},
+
+            //     {data: 'price', name: 'price'},
+
+            //     {data: 'action', name: 'action'},
+
+            // ],
+        // });
     </script>
 @endsection
