@@ -30,6 +30,7 @@ Route::group([
     Route::get('post-reparation-checking/{id}/finish-checking', 'Reparation4CrudController@finishChecking');
     Route::get('post-reparation-checking/{id}/invoice/create', 'Reparation4CrudController@createInvoice');
     Route::post('post-reparation-checking/{id}/invoice/add-item', 'Reparation4CrudController@addItemtoInvoice');
+    Route::get('post-reparation-checking/{id}/invoice/del-item/{item_id}', 'Reparation4CrudController@delItem')->name('del-item');
 
 
     Route::crud('need-pickup', 'Reparation5CrudController');

@@ -58,11 +58,7 @@ class Reparation4CrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $invoice = Invoice::where('reparation_id', 1)->first();
-        if(!$invoice){
-            CRUD::removeButton('create_invoice_detail');
-            CRUD::addButtonFromView('line', 'create_invoice', 'create_invoice', 'beginning');
-        }
+        CRUD::addButtonFromView('line', 'create_invoice', 'create_invoice', 'beginning');
         CRUD::addButtonFromView('line', 'finish-checking', 'done_checking', 'beginning');
         CRUD::addColumn([
             'label' => 'Reparation ID',
@@ -120,15 +116,14 @@ class Reparation4CrudController extends CrudController
     {
         $reparation_data = Reparation::where('id', $id)->first();
         $invoice_data = Invoice::where('reparation_id', $id)->first();
-        if($invoice_data == NULL){
+        if ($invoice_data == NULL) {
             $invoice = Invoice::create([
-                'invoice_id' => 'INV-'.$reparation_data->reparation_id,
+                'invoice_id' => 'INV-' . $reparation_data->reparation_id,
                 'reparation_id' => $reparation_data->id,
             ]);
             \Alert::add('success', 'Invoice created succesfully!')->flash();
             return redirect(backpack_url('post-reparation-checking'));
-        }
-        else{
+        } else {
             \Alert::error("Data already exist!")->flash();
             return redirect(backpack_url('post-reparation-checking'));
         }
@@ -138,11 +133,11 @@ class Reparation4CrudController extends CrudController
     {
         $data = $request->all();
 
-        $service_price = Service::where('id',$data['item'])->value('price');
+        $service_price = Service::where('id', $data['item'])->value('price');
         $total = $service_price * $data['qty'];
         $invoice = Invoice::where('reparation_id', $data['id'])->first();
         DB::beginTransaction();
-        try{
+        try {
             //add data to invoicedetail
             $invoice_detail = new InvoiceDetail;
             $invoice_detail->invoice_id = $invoice->id;
@@ -158,7 +153,7 @@ class Reparation4CrudController extends CrudController
             $invoice->save();
 
             DB::commit();
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
 
             //set error data for error log
@@ -170,8 +165,21 @@ class Reparation4CrudController extends CrudController
             Log::error("Create failed", $error_data);
             return response()->json($error_data);
         }
-     
-        return response()->json(['success'=>'Item successfully added!']);
+
+        return response()->json(['success' => 'Item successfully added!']);
+    }
+
+    public function delItem($id, $item_id)
+    {
+        $invoice_item = InvoiceDetail::where('id', $item_id)->delete();
+        $invoice = Invoice::where('id', $id)->first();
+
+        $total_all = InvoiceDetail::where('invoice_id', $invoice->id)->sum('price');
+
+        $invoice->total = $total_all;
+        $invoice->save();
+        \Alert::add('success', 'Data deleted succesfully!')->flash();
+            return redirect(backpack_url('post-reparation-checking/'.$id.'/invoice'));
     }
 
     // protected function setupInvoiceOperation()
@@ -202,7 +210,7 @@ class Reparation4CrudController extends CrudController
     //             'readonly'  => 'readonly',
     //         ],
     //     ]);
-        
+
     //     CRUD::addField([
     //         'name' => 'phone_number',
     //         'label' => 'Phone',
@@ -315,29 +323,35 @@ class Reparation4CrudController extends CrudController
     {
         $reparation = Reparation::where('id', $id)->first();
         $customer = Customer::where('id', $reparation->customer_id)->first();
-        DB::beginTransaction();
-        try {
-            $reparation->post_repair_inspection_date = Carbon::now();
-            $reparation->save();
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
+        $invoice = Invoice::where('reparation_id', $id);
+        if ($invoice) {
+            DB::beginTransaction();
+            try {
+                $reparation->post_repair_inspection_date = Carbon::now();
+                $reparation->save();
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
 
-            //set error data for error log
-            $error_data = [];
-            $error_data["function"] = "finishChecking";
-            $error_data["controller"] = "ReparationCrudController";
-            $error_data["message"] = $e->getMessage();
+                //set error data for error log
+                $error_data = [];
+                $error_data["function"] = "finishChecking";
+                $error_data["controller"] = "ReparationCrudController";
+                $error_data["message"] = $e->getMessage();
 
-            Log::error("Create failed", $error_data);
-            \Alert::error("Create failed")->flash();
-        }
-        $response = Http::asForm()->post('http://localhost:3000/send', [
-            'phone' => '62' . $customer->phone . '@c.us',
-            'message' => 'Hai kak ' . $customer->name . ', komputer anda sudah selesai kami cek dan sudah berfungsi normal. Silakan datang ke toko kami untuk melanjutkan pembayaran dan mengambil komputer anda. Terimakasih sudah mempercayakan perbaikan komputer kepada kami. Salam Bigbang!',
-        ]);
-        if ($response->successful()) {
-            \Alert::add('success', 'Data updated succesfully.')->flash();
+                Log::error("Create failed", $error_data);
+                \Alert::error("Create failed")->flash();
+            }
+            $response = Http::asForm()->post('http://localhost:3000/send', [
+                'phone' => '62' . $customer->phone . '@c.us',
+                'message' => 'Hai kak ' . $customer->name . ', komputer anda sudah selesai kami cek dan sudah berfungsi normal. Silakan datang ke toko kami untuk melanjutkan pembayaran dan mengambil komputer anda. Terimakasih sudah mempercayakan perbaikan komputer kepada kami. Salam Bigbang!',
+            ]);
+            if ($response->successful()) {
+                \Alert::add('success', 'Data updated succesfully.')->flash();
+                return redirect(backpack_url('post-reparation-checking'));
+            }
+        } else {
+            \Alert::error("Please create invoice data first")->flash();
             return redirect(backpack_url('post-reparation-checking'));
         }
     }

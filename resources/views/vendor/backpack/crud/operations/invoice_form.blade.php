@@ -95,30 +95,30 @@
                             cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th style="width:5%">No.</th>
-                                    <th style="width:60%">Item</th>
-                                    <th style="width:10%">Qty</th>
-                                    <th style="width:10%">Price</th>
-                                    <th style="width:15%">Action</th>
+                                    <th style="width:5%; text-align:center">No.</th>
+                                    <th style="width:60%; text-align:center">Item</th>
+                                    <th style="width:10%; text-align:center">Qty</th>
+                                    <th style="width:10%; text-align:center">Price</th>
+                                    <th style="width:15%; text-align:center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($invoice_details as $item)
                                 <tr>
-                                    <th style="width:5%">{{ $loop->iteration }}</th>
-                                    <th style="width:60%">{{ $item->name }}</th>
-                                    <th style="width:10%">{{ $item->item_qty }}</th>
-                                    <th style="width:10%">Rp {{ $item->price }}</th>
-                                    <th style="width:15%">Delete</th>
+                                    <th style="width:5%">{{ $loop->iteration }}.</th>
+                                    <th style="width:60%">{{ $item->sname }}</th>
+                                    <th style="width:10%; text-align:center">{{ $item->item_qty }}</th>
+                                    <th style="width:10%; text-align:right">Rp {{ number_format($item->price, 0 , '.' , ',') }}</th>
+                                    <th style="width:15%"><a href={{ route('del-item', ['id' => $entry->id , 'item_id' => $item->id]) }}>Delete</a></th>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th style="width:5%">.</th>
+                                    <th style="width:5%"></th>
                                     <th style="width:60%"></th>
                                     <th style="width:10%">Total</th>
-                                    <th style="width:25%">Rp {{ $invoice->total }}</th>
+                                    <th style="width:25%; text-align:right">Rp {{ number_format($invoice->total, 0 , '.' , ',') }}</th>
                                 </tr>
                             </tfoot>
                         </table>
