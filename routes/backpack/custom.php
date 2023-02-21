@@ -31,6 +31,7 @@ Route::group([
     Route::get('post-reparation-checking/{id}/invoice/create', 'Reparation4CrudController@createInvoice');
     Route::post('post-reparation-checking/{id}/invoice/add-item', 'Reparation4CrudController@addItemtoInvoice');
     Route::get('post-reparation-checking/{id}/invoice/del-item/{item_id}', 'Reparation4CrudController@delItem')->name('del-item');
+    Route::get('post-reparation-checking/{id}/generate-invoice', 'Reparation4CrudController@generateInvoice');
 
 
     Route::crud('need-pickup', 'Reparation5CrudController');

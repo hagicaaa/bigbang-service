@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Prologue\Alerts\Facades\Alert;
 use Datatables;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /**
  * Class Reparation4CrudController
@@ -45,7 +46,7 @@ class Reparation4CrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Reparation::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/post-reparation-checking');
-        CRUD::setEntityNameStrings('reparation', 'Post Reparation Checking');
+        CRUD::setEntityNameStrings('reparation', 'QC Inspection');
         CRUD::addClause('where', 'repair_finish', '!=', NULL);
         CRUD::addClause('where', 'post_repair_inspection_date', '=', NULL);
     }
@@ -180,6 +181,22 @@ class Reparation4CrudController extends CrudController
         $invoice->save();
         \Alert::add('success', 'Data deleted succesfully!')->flash();
             return redirect(backpack_url('post-reparation-checking/'.$id.'/invoice'));
+    }
+
+    public function generateInvoice($id)
+    {
+        $data = [];
+        $data['reparation'] = Reparation::where('id',$id)->first();
+        $data['customer_data'] = Customer::where('id', $data['reparation']->customer_id)->first();
+        $data['computer_data'] = Computer::where('id', $data['reparation']->computer_id)->first();
+        $data['invoice'] = Invoice::where('reparation_id', $id)->first();
+        $data['invoice_details'] = InvoiceDetail::select('invoice_details.id', 'invoice_id', 'service_id', 'services.name as sname', 'services.price as sprice' , 'item_qty', 'invoice_details.price as subtotal')
+            ->where('invoice_id', $data['invoice']->id)
+            ->leftJoin('services', 'services.id', '=', 'service_id')
+            ->get();
+        $pdf = Pdf::loadView('crud::print', $data)->setPaper('a4', 'landscape');
+        return $pdf->stream($data['invoice']->invoice_id.'.pdf');
+        // return view('crud::print', $data);
     }
 
     // protected function setupInvoiceOperation()
