@@ -45,7 +45,7 @@ class Reparation4CrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Reparation::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/post-reparation-checking');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/qc-inspection');
         CRUD::setEntityNameStrings('reparation', 'QC Inspection');
         CRUD::addClause('where', 'repair_finish', '!=', NULL);
         CRUD::addClause('where', 'post_repair_inspection_date', '=', NULL);
@@ -123,10 +123,10 @@ class Reparation4CrudController extends CrudController
                 'reparation_id' => $reparation_data->id,
             ]);
             \Alert::add('success', 'Invoice created succesfully!')->flash();
-            return redirect(backpack_url('post-reparation-checking'));
+            return redirect(backpack_url('qc-inspection'));
         } else {
             \Alert::error("Data already exist!")->flash();
-            return redirect(backpack_url('post-reparation-checking'));
+            return redirect(backpack_url('qc-inspection'));
         }
     }
 
@@ -180,7 +180,7 @@ class Reparation4CrudController extends CrudController
         $invoice->total = $total_all;
         $invoice->save();
         \Alert::add('success', 'Data deleted succesfully!')->flash();
-            return redirect(backpack_url('post-reparation-checking/'.$id.'/invoice'));
+            return redirect(backpack_url('qc-inspection/'.$id.'/invoice'));
     }
 
     public function generateInvoice($id)
@@ -365,11 +365,11 @@ class Reparation4CrudController extends CrudController
             ]);
             if ($response->successful()) {
                 \Alert::add('success', 'Data updated succesfully.')->flash();
-                return redirect(backpack_url('post-reparation-checking'));
+                return redirect(backpack_url('qc-inspection'));
             }
         } else {
             \Alert::error("Please create invoice data first")->flash();
-            return redirect(backpack_url('post-reparation-checking'));
+            return redirect(backpack_url('qc-inspection'));
         }
     }
 }

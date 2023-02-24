@@ -198,7 +198,7 @@
                 var qty = $("#qty").val();
                 var reparation_id = {{ $entry->id }};
                 $.ajax({
-                    url: "{{ url('admin/post-reparation-checking/' . $entry->id . '/invoice/add-item') }}",
+                    url: "{{ url('admin/qc-inspection/' . $entry->id . '/invoice/add-item') }}",
                     type: "post",
                     dataType: 'json',
                     data: {
@@ -220,7 +220,7 @@
         });
 
         // $("#invoice-table").DataTable({
-        //     ajax: "{{ url('admin/post-reparation-checking/' . $entry->id . '/invoice/list') }}"
+        //     ajax: "{{ url('admin/qc-inspection/' . $entry->id . '/invoice/list') }}"
             // responsive: false,
             // columnDefs: [
             //     { width: "5%", orderable: false, targets: 0 },

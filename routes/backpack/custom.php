@@ -26,12 +26,12 @@ Route::group([
     Route::crud('ongoing-reparation', 'Reparation3CrudController');
     Route::get('ongoing-reparation/{id}/finish-repair', 'Reparation3CrudController@repairFinish');
 
-    Route::crud('post-reparation-checking', 'Reparation4CrudController');
-    Route::get('post-reparation-checking/{id}/finish-checking', 'Reparation4CrudController@finishChecking');
-    Route::get('post-reparation-checking/{id}/invoice/create', 'Reparation4CrudController@createInvoice');
-    Route::post('post-reparation-checking/{id}/invoice/add-item', 'Reparation4CrudController@addItemtoInvoice');
-    Route::get('post-reparation-checking/{id}/invoice/del-item/{item_id}', 'Reparation4CrudController@delItem')->name('del-item');
-    Route::get('post-reparation-checking/{id}/generate-invoice', 'Reparation4CrudController@generateInvoice');
+    Route::crud('qc-inspection', 'Reparation4CrudController');
+    Route::get('qc-inspection/{id}/finish-checking', 'Reparation4CrudController@finishChecking');
+    Route::get('qc-inspection/{id}/invoice/create', 'Reparation4CrudController@createInvoice');
+    Route::post('qc-inspection/{id}/invoice/add-item', 'Reparation4CrudController@addItemtoInvoice');
+    Route::get('qc-inspection/{id}/invoice/del-item/{item_id}', 'Reparation4CrudController@delItem')->name('del-item');
+    Route::get('qc-inspection/{id}/generate-invoice', 'Reparation4CrudController@generateInvoice');
 
 
     Route::crud('need-pickup', 'Reparation5CrudController');
