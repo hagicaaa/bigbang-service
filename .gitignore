@@ -15,4 +15,4 @@ yarn-error.log
 /.vscode
 .DS_store
 /whatsapp-server/node_modules
-/whatsapp-server/.wwebjs_auth
+/whatsapp-server/session_info

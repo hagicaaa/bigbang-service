@@ -138,7 +138,7 @@ class Reparation2CrudController extends CrudController
             \Alert::error("Create failed")->flash();
         }
         $response = Http::asForm()->post('http://localhost:3000/send', [
-            'phone' => '62'.$customer->phone.'@c.us',
+            'number' => $customer->phone.'@c.us',
             'message' => 'Hai kak '.$customer->name.', terimakasih sudah melakukan konfirmasi perbaikan. Teknisi kami akan segera memulai perbaikan. Salam Bigbang!',
         ]);
         if($response->successful()){
@@ -171,7 +171,7 @@ class Reparation2CrudController extends CrudController
             \Alert::error("Create failed")->flash();
         }
         $response = Http::asForm()->post('http://localhost:3000/send', [
-            'phone' => '62'.$customer->phone.'@c.us',
+            'number' => $customer->phone.'@c.us',
             'message' => 'Hai kak '.$customer->name.', terimakasih sudah melakukan konfirmasi pembatalan perbaikan. Komputer anda dapat segera diambil. Salam Bigbang!',
         ]);
         if($response->successful()){

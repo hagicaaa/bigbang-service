@@ -360,7 +360,7 @@ class Reparation4CrudController extends CrudController
                 \Alert::error("Create failed")->flash();
             }
             $response = Http::asForm()->post('http://localhost:3000/send', [
-                'phone' => '62' . $customer->phone . '@c.us',
+                'number' => $customer->phone.'@c.us',
                 'message' => 'Hai kak ' . $customer->name . ', komputer anda sudah selesai kami cek dan sudah berfungsi normal. Silakan datang ke toko kami untuk melanjutkan pembayaran dan mengambil komputer anda. Terimakasih sudah mempercayakan perbaikan komputer kepada kami. Salam Bigbang!',
             ]);
             if ($response->successful()) {

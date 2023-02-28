@@ -226,8 +226,14 @@ class ReparationCrudController extends CrudController
             Log::error("Create failed", $error_data);
             \Alert::error("Create failed")->flash();
         }
-        \Alert::add('success', 'Data added succesfully.')->flash();
-        return redirect(backpack_url('need-checking'));
+        $response = Http::asForm()->post('http://localhost:3000/send', [
+            'number' => $customer->phone.'@c.us',
+            'message' => 'Hai kak '.$customer->name.', komputer anda berhasil terinput kedalam database kami. Kode reparasi anda adalah *'.$reparation->reparation_id.'*. Teknisi kami akan segera melakukan pengecekan pada komputer anda. Terimakasih, Salam Bigbang!',
+        ]);
+        if($response->successful()){
+            \Alert::add('success', 'Data added succesfully.')->flash();
+            return redirect(backpack_url('need-checking'));
+        }
 
     }
 
@@ -265,7 +271,7 @@ class ReparationCrudController extends CrudController
             \Alert::error("Create failed")->flash();
         }
         $response = Http::asForm()->post('http://localhost:3000/send', [
-            'phone' => '62'.$customer->phone.'@c.us',
+            'number' => $customer->phone.'@c.us',
             'message' => 'Hai kak '.$customer->name.', teknisi kami sudah selesai melakukan pengecekan pada komputer anda. Teknisi kami akan segera menghubungi anda secepatnya untuk detail kerusakan dan konfirmasi perbaikan. Salam Bigbang!',
         ]);
         if($response->successful()){
