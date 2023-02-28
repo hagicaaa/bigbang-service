@@ -134,7 +134,8 @@ class Reparation4CrudController extends CrudController
     {
         $data = $request->all();
 
-        $service_price = Service::where('id', $data['item'])->value('price');
+        $service_data = Service::where('id', $data['item'])->first();
+        $service_price = $service_data->price;
         $total = $service_price * $data['qty'];
         $invoice = Invoice::where('reparation_id', $data['id'])->first();
         DB::beginTransaction();
@@ -146,6 +147,17 @@ class Reparation4CrudController extends CrudController
             $invoice_detail->item_qty = $data['qty'];
             $invoice_detail->price = $total;
             $invoice_detail->save();
+
+            //decrement in master data
+            if($service_data->category == "sparepart"){
+                if($service_data->qty < $data['qty']){
+                    return response()->json(['error' => 'Item cannot exceed qty!']);
+                }
+                else{
+                    $service_data->qty = $service_data->qty - $data['qty'];
+                    $service_data->save();
+                }
+            }
 
             //count total
             $total_all = InvoiceDetail::where('invoice_id', $invoice->id)->sum('price');
@@ -172,8 +184,17 @@ class Reparation4CrudController extends CrudController
 
     public function delItem($id, $item_id)
     {
-        $invoice_item = InvoiceDetail::where('id', $item_id)->delete();
+        // $invoice_item = InvoiceDetail::where('id', $item_id)->delete();
         $invoice = Invoice::where('id', $id)->first();
+        // $service_data = Service::where('id', $data['item'])->first();
+        $invoice_item = InvoiceDetail::where('id', $item_id)->first();
+        $service_data = Service::where('id', $invoice_item->service_id)->first();
+        
+        if($service_data->category == "sparepart"){
+            $service_data->qty = $service_data->qty + $invoice_item->item_qty;
+            $service_data->save();
+        }
+        $invoice_item->delete();
 
         $total_all = InvoiceDetail::where('invoice_id', $invoice->id)->sum('price');
 

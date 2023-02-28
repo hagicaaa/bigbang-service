@@ -212,7 +212,8 @@
                         location.reload();
                     },
                     error: function(result) {
-                        alert(result);
+                        alert(result.error);
+                        location.reload();
                     },
                 });
 
