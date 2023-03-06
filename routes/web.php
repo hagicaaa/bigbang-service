@@ -15,7 +15,9 @@ use App\Http\Controllers\Api\ApiController;
 */
 
 Route::redirect('/', '/admin');
-Route::view('/cek-reparasi','welcome');
+Route::view('/tracking','status_checking');
+Route::post('/tracking/detail', 'App\Http\Controllers\TrackingController@index');
+
 Route::get('api/service', 'App\Http\Controllers\Api\ApiController@index');
 Route::get('api/service/{id}', 'Api\ApiController@show');
 Route::group([

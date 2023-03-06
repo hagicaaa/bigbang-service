@@ -40,7 +40,6 @@ class Reparation5CrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/need-pickup');
         CRUD::setEntityNameStrings('reparation', 'Reparation Done');
         CRUD::addClause('where', 'post_repair_inspection_date', '!=', NULL);
-        CRUD::addClause('where', 'paid_at', '=', NULL);
     }
 
     /**

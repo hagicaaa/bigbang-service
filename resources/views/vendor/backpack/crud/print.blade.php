@@ -36,6 +36,7 @@
             padding:12px;
             border:1px solid #333;
             width:185px;
+            vertical-align: top;
         }
         th{
             background-color: #f0f0f0;
@@ -69,6 +70,38 @@
                         <h4>Customer: </h4>
                         <p>{{ $customer_data->name }}<br>
                         +62{{ $customer_data->phone }} <br>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h4>
+                            Computer
+                        </h4>
+                        <p>{{ $computer_data->brand }} {{ $computer_data->type }}<br>
+                        S/N : {{ $computer_data->serial_number }}
+                        </p>
+                        <h4>
+                            Equipment
+                        </h4>
+                        <p>
+                            @if($computer_data->eq_bag==1 && $computer_data->eq_charger_cable==1)
+                            Bag, Charger Cable
+                            @elseif($computer_data->eq_charger_cable==1)
+                            Charger Cable
+                            @elseif($computer_data->eq_bag==1)
+                            Bag
+                            @else
+                            -
+                            @endif
+                        </p>
+                    </td>
+                    <td colspan="2">
+                        <h4>
+                            Problem
+                        </h4>
+                        <p>
+                            {{ $computer_data->problem }}
                         </p>
                     </td>
                 </tr>
