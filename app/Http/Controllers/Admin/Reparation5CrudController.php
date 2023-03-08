@@ -37,7 +37,7 @@ class Reparation5CrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Reparation::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/need-pickup');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/reparation-done');
         CRUD::setEntityNameStrings('reparation', 'Reparation Done');
         CRUD::addClause('where', 'post_repair_inspection_date', '!=', NULL);
     }
@@ -114,22 +114,23 @@ class Reparation5CrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    public function pickUp($id)
+    public function updatePayment($id)
     {
         $reparation = Reparation::where('id', $id)->first();
+        $invoice = Invoice::where('reparation_id', $id)->first();
         $customer = Customer::where('id', $reparation->customer_id)->first();
         DB::beginTransaction();
         try{
-            $reparation->paid_at = Carbon::now();
+            $invoice->payment_status = 1;
             // $reparation-> = Carbon::now();
-            $reparation->save();
+            $invoice->save();
             DB::commit();
         } catch(\Exception $e){
             DB::rollBack();
 
             //set error data for error log
             $error_data = [];
-            $error_data["function"] = "pickUp";
+            $error_data["function"] = "updatePayment";
             $error_data["controller"] = "ReparationCrudController";
             $error_data["message"] = $e->getMessage();
 
@@ -142,7 +143,7 @@ class Reparation5CrudController extends CrudController
         ]);
         if($response->successful()){
             \Alert::add('success', 'Data updated succesfully.')->flash();
-            return redirect(backpack_url('need-pickup'));
+            return redirect(backpack_url('reparation-done'));
         }
     }
 }

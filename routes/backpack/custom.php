@@ -34,8 +34,8 @@ Route::group([
     Route::get('qc-inspection/{id}/generate-invoice', 'Reparation4CrudController@generateInvoice');
 
 
-    Route::crud('need-pickup', 'Reparation5CrudController');
-    Route::get('need-pickup/{id}/picked-up', 'Reparation5CrudController@pickUp');
+    Route::crud('reparation-done', 'Reparation5CrudController');
+    Route::get('reparation-done/{id}/update-payment', 'Reparation5CrudController@pickUp');
 
 
 

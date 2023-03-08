@@ -8,7 +8,7 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('need-reparation') }}'><i class='nav-icon la la-address-card'></i> Need Reparation</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('ongoing-reparation') }}'><i class='nav-icon la la-address-card'></i> Ongoing Reparation</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('qc-inspection') }}'><i class='nav-icon la la-address-card'></i> QC Inspection</a></li>
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('need-pickup') }}'><i class='nav-icon la la-address-card'></i> Reparation Done</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('reparation-done') }}'><i class='nav-icon la la-address-card'></i> Reparation Done</a></li>
     </ul>
 </li>
 <li class="nav-item nav-dropdown">
