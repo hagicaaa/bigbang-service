@@ -16,6 +16,8 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::crud('reparations', 'ReparationListCrudController');
+    
     Route::crud('need-checking', 'ReparationCrudController');
     Route::get('need-checking/{id}/done-inspection','ReparationCrudController@doneInspection');
 

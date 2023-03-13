@@ -41,12 +41,12 @@ class CustomerCrudController extends CrudController
     {
         CRUD::addColumn([
             'name' => 'name',
-            'label' => 'Nama'
+            'label' => 'Name'
         ]);
 
         CRUD::addColumn([
             'name' => 'phone',
-            'label' => 'No HP',
+            'label' => 'Customer',
             'prefix' => '+62'
         ]);
 
@@ -74,13 +74,13 @@ class CustomerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'name',
-            'label' => 'Nama',
+            'label' => 'Name',
             'type' => 'text'
         ]);
 
         CRUD::addField([
             'name' => 'phone',
-            'label' => 'No HP',
+            'label' => 'Phone',
             'type' => 'text',
             'prefix' => '+62'
         ]);

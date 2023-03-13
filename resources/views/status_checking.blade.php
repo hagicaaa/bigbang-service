@@ -21,7 +21,7 @@
             <form method="POST" action="/tracking/detail" class="my-auto">
                 {{ csrf_field() }}
                 <div class="input-group">
-                    <input type="text" name="tracking_no" class="form-control" placeholder="Insert Phone Number/Reparation No.">
+                    <input type="text" name="tracking_no" class="form-control" placeholder="Insert Phone Number/Reparation No." required>
                     <button type="submit" class="btn btn-success">Track</button>
                 </div>
             </form>
