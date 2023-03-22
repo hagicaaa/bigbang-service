@@ -37,7 +37,7 @@ Route::group([
 
 
     Route::crud('reparation-done', 'Reparation5CrudController');
-    Route::get('reparation-done/{id}/update-payment', 'Reparation5CrudController@pickUp');
+    Route::get('reparation-done/{id}/update-payment', 'Reparation5CrudController@updatePayment');
 
 
 

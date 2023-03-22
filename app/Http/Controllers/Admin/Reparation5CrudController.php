@@ -6,6 +6,7 @@ use App\Http\Requests\ReparationRequest;
 use App\Models\Computer;
 use App\Models\Customer;
 use App\Models\Reparation;
+use App\Models\Invoice;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Response;
@@ -50,7 +51,7 @@ class Reparation5CrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::addButtonFromView('line', 'picked-up', 'pickup', 'beginning');
+        CRUD::addButtonFromView('line', 'update-payment', 'update_payment', 'beginning');
         CRUD::addColumn([
             'label' => 'Reparation ID',
             'name' => 'reparation_id'
@@ -131,19 +132,39 @@ class Reparation5CrudController extends CrudController
             //set error data for error log
             $error_data = [];
             $error_data["function"] = "updatePayment";
-            $error_data["controller"] = "ReparationCrudController";
+            $error_data["controller"] = "Reparation5CrudController";
             $error_data["message"] = $e->getMessage();
 
             Log::error("Create failed", $error_data);
             \Alert::error("Create failed")->flash();
         }
-        $response = Http::asForm()->post('http://localhost:3000/send', [
-            'number' => $customer->phone.'@c.us',
-            'message' => 'Hai kak '.$customer->name.', komputermu sudah selesai kami cek dan sudah berfungsi dengan normal. Silakan datang ke workshop kami untuk melanjutkan pembayaran dan mengambil komputermu. Terimakasih sudah mempercayakan perbaikan komputermu kepada kami. Salam Bigbang!',
-        ]);
-        if($response->successful()){
-            \Alert::add('success', 'Data updated succesfully.')->flash();
-            return redirect(backpack_url('reparation-done'));
+        \Alert::add('success', 'Payment updated succesfully.')->flash();
+        return redirect(backpack_url('reparation-done'));
+    }
+    public function updatePickup($id)
+    {
+        $reparation = Reparation::where('id', $id)->first();
+        $invoice = Invoice::where('reparation_id', $id)->first();
+        $customer = Customer::where('id', $reparation->customer_id)->first();
+        DB::beginTransaction();
+        try{
+            $invoice->pickup_status = 1;
+            // $reparation-> = Carbon::now();
+            $invoice->save();
+            DB::commit();
+        } catch(\Exception $e){
+            DB::rollBack();
+
+            //set error data for error log
+            $error_data = [];
+            $error_data["function"] = "updatePayment";
+            $error_data["controller"] = "Reparation5CrudController";
+            $error_data["message"] = $e->getMessage();
+
+            Log::error("Create failed", $error_data);
+            \Alert::error("Create failed")->flash();
         }
+        \Alert::add('success', 'Payment updated succesfully.')->flash();
+        return redirect(backpack_url('reparation-done'));
     }
 }
