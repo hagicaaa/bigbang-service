@@ -26,8 +26,8 @@ class CreateReparationsTable extends Migration
             $table->unsignedBigInteger('received_by');
             $table->timestamps();
 
-            $table->foreign('computer_id')->references('id')->on('computers');
-            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('computer_id')->references('id')->on('computers')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('received_by')->references('id')->on('users');
         });
     }

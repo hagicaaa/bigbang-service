@@ -31,3 +31,4 @@
 </li>
 @endrole
 {{-- <li class='nav-item'><a class='nav-link' href='{{ backpack_url('invoice') }}'><i class='nav-icon la la-question'></i> Invoices</a></li> --}}
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('booking') }}'><i class='nav-icon la la-question'></i> Bookings</a></li>

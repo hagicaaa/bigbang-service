@@ -17,6 +17,8 @@ use App\Http\Controllers\Api\ApiController;
 Route::redirect('/', '/admin');
 Route::view('/tracking','status_checking');
 Route::post('/tracking/detail', 'App\Http\Controllers\TrackingController@index');
+Route::view('/booking','booking');
+Route::post('/booking/book','App\Http\Controllers\BookingController@index');
 
 Route::get('api/service', 'App\Http\Controllers\Api\ApiController@index');
 Route::get('api/service/{id}', 'Api\ApiController@show');
