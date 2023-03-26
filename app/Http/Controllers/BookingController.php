@@ -55,7 +55,7 @@ class BookingController extends Controller
         }
         $response = Http::asForm()->post('http://localhost:3000/send', [
             'number' => $customer->phone.'@c.us',
-            'message' => 'Hai kak '.$customer->name.', terimakasih telah melakukan booking reparasi. Anda telah melakukan booking service pada tanggal *'.$request->book_date.'*, mohon untuk datang pada tanggal yang ditentukan. Terimakasih, Salam Bigbang!',
+            'message' => 'Hai kak '.$customer->name.', terimakasih telah melakukan booking service. Anda telah melakukan booking service pada tanggal *'.$request->book_date.'*, mohon untuk datang pada tanggal yang ditentukan. Terimakasih, Salam Bigbang!',
         ]);
         if($response->successful()){
             \Alert::add('success', 'Data added succesfully.')->flash();

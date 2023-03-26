@@ -20,8 +20,8 @@ class CreateReservationsTable extends Migration
             $table->date('book_date');
             $table->timestamps();
             
-            $table->foreign('computer_id')->references('id')->on('computers')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('computers')->onDelete('cascade');
+            $table->foreign('computer_id')->references('id')->on('computers');
+            $table->foreign('customer_id')->references('id')->on('customers');
         });
     }
 

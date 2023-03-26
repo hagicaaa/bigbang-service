@@ -41,6 +41,7 @@ Route::group([
 
 
 
+
     
     Route::crud('computer', 'ComputerCrudController');
     Route::crud('brand', 'BrandCrudController');
@@ -49,4 +50,6 @@ Route::group([
     Route::crud('service', 'ServiceCrudController');
     Route::crud('sparepart', 'SparepartCrudController');
     Route::crud('booking', 'BookingCrudController');
+    Route::get('booking/{id}/confirm','BookingCrudController@confirm');
+    Route::get('booking/{id}/delete','BookingCrudController@deleteItem');
 }); // this should be the absolute last line of this file

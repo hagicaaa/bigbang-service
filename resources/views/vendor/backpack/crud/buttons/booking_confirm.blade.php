@@ -1,0 +1,1 @@
+<a href="{{ url($crud->route.'/'.$entry->getKey().'/confirm') }}" name="booking_confirm" class="btn btn-sm btn-link"><i class="la la-check"></i> Confirm</a>

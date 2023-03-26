@@ -35,6 +35,16 @@ class Booking extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function computers()
+    {
+        return $this->belongsTo(Computer::class, 'computer_id');
+    }
+
+    public function customers()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
