@@ -35,7 +35,6 @@ class Reparation4CrudController extends CrudController
     // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     // use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-    use \App\Http\Controllers\Admin\Operations\InvoiceOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -59,7 +58,6 @@ class Reparation4CrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::addButtonFromView('line', 'create_invoice', 'create_invoice', 'beginning');
         CRUD::addButtonFromView('line', 'finish-checking', 'done_checking', 'beginning');
         CRUD::addColumn([
             'label' => 'Reparation ID',
@@ -113,112 +111,6 @@ class Reparation4CrudController extends CrudController
          */
     }
 
-    public function createInvoice($id)
-    {
-        $reparation_data = Reparation::where('id', $id)->first();
-        $invoice_data = Invoice::where('reparation_id', $id)->first();
-        if ($invoice_data == NULL) {
-            $invoice = Invoice::create([
-                'invoice_id' => 'INV-' . $reparation_data->reparation_id,
-                'reparation_id' => $reparation_data->id,
-            ]);
-            \Alert::add('success', 'Invoice created succesfully!')->flash();
-            return redirect(backpack_url('qc-inspection'));
-        } else {
-            \Alert::error("Data already exist!")->flash();
-            return redirect(backpack_url('qc-inspection'));
-        }
-    }
-
-    public function addItemtoInvoice(Request $request)
-    {
-        $data = $request->all();
-
-        $service_data = Service::where('id', $data['item'])->first();
-        $service_price = $service_data->price;
-        $total = $service_price * $data['qty'];
-        $invoice = Invoice::where('reparation_id', $data['id'])->first();
-        DB::beginTransaction();
-        try {
-            //add data to invoicedetail
-            $invoice_detail = new InvoiceDetail;
-            $invoice_detail->invoice_id = $invoice->id;
-            $invoice_detail->service_id = $data['item'];
-            $invoice_detail->item_qty = $data['qty'];
-            $invoice_detail->price = $total;
-            $invoice_detail->save();
-
-            //decrement in master data
-            if($service_data->category == "sparepart"){
-                if($service_data->qty < $data['qty']){
-                    return response()->json(['error' => 'Item cannot exceed qty!']);
-                }
-                else{
-                    $service_data->qty = $service_data->qty - $data['qty'];
-                    $service_data->save();
-                }
-            }
-
-            //count total
-            $total_all = InvoiceDetail::where('invoice_id', $invoice->id)->sum('price');
-
-            $invoice->total = $total_all;
-            $invoice->save();
-
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            //set error data for error log
-            $error_data = [];
-            $error_data["function"] = "addItemtoInvoice";
-            $error_data["controller"] = "Reparation4CrudController";
-            $error_data["message"] = $e->getMessage();
-
-            Log::error("Create failed", $error_data);
-            return response()->json($error_data);
-        }
-
-        return response()->json(['success' => 'Item successfully added!']);
-    }
-
-    public function delItem($id, $item_id)
-    {
-        // $invoice_item = InvoiceDetail::where('id', $item_id)->delete();
-        $invoice = Invoice::where('id', $id)->first();
-        // $service_data = Service::where('id', $data['item'])->first();
-        $invoice_item = InvoiceDetail::where('id', $item_id)->first();
-        $service_data = Service::where('id', $invoice_item->service_id)->first();
-        
-        if($service_data->category == "sparepart"){
-            $service_data->qty = $service_data->qty + $invoice_item->item_qty;
-            $service_data->save();
-        }
-        $invoice_item->delete();
-
-        $total_all = InvoiceDetail::where('invoice_id', $invoice->id)->sum('price');
-
-        $invoice->total = $total_all;
-        $invoice->save();
-        \Alert::add('success', 'Data deleted succesfully!')->flash();
-            return redirect(backpack_url('qc-inspection/'.$id.'/invoice'));
-    }
-
-    public function generateInvoice($id)
-    {
-        $data = [];
-        $data['reparation'] = Reparation::where('id',$id)->first();
-        $data['customer_data'] = Customer::where('id', $data['reparation']->customer_id)->first();
-        $data['computer_data'] = Computer::where('id', $data['reparation']->computer_id)->first();
-        $data['invoice'] = Invoice::where('reparation_id', $id)->first();
-        $data['invoice_details'] = InvoiceDetail::select('invoice_details.id', 'invoice_id', 'service_id', 'services.name as sname', 'services.price as sprice' , 'item_qty', 'invoice_details.price as subtotal')
-            ->where('invoice_id', $data['invoice']->id)
-            ->leftJoin('services', 'services.id', '=', 'service_id')
-            ->get();
-        $pdf = Pdf::loadView('crud::print', $data)->setPaper('a4', 'landscape');
-        return $pdf->stream($data['invoice']->invoice_id.'.pdf');
-        // return view('crud::print', $data);
-    }
 
     // protected function setupInvoiceOperation()
     // {
