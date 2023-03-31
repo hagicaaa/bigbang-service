@@ -1,0 +1,1 @@
+<a href="{{ url($crud->route.'/'.$entry->getKey().'/restock') }}" class="btn btn-sm btn-link"><i class="la la-box"></i> Restock</a>

@@ -52,4 +52,5 @@ Route::group([
     Route::crud('booking', 'BookingCrudController');
     Route::get('booking/{id}/confirm','BookingCrudController@confirm');
     Route::get('booking/{id}/delete','BookingCrudController@deleteItem');
+    Route::crud('sparepart-restock', 'SparepartRestockCrudController');
 }); // this should be the absolute last line of this file
