@@ -45,6 +45,28 @@ class Reparation extends Model
     {
         return $this->belongsTo(User::class, 'received_by');
     }
+
+    public function getEqBag()
+    {
+        $computer = Computer::where('id', $this->computer_id)->first();
+        if($computer['eq_bag'] == 0){
+            return 'No';
+        }
+        else{
+            return 'Yes';
+        }
+    }
+
+    public function getEqChargerCable()
+    {
+        $computer = Computer::where('id', $this->computer_id)->first();
+        if($computer['eq_charger_cable'] == 0){
+            return 'No';
+        }
+        else{
+            return 'Yes';
+        }
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

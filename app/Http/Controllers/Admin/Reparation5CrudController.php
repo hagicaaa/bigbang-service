@@ -89,6 +89,81 @@ class Reparation5CrudController extends CrudController
          */
     }
 
+    protected function setupShowOperation()
+    {
+        // by default the Show operation will try to show all columns in the db table,
+        // but we can easily take over, and have full control of what columns are shown,
+        // by changing this config for the Show operation
+        $this->crud->set('show.setFromDb', false);
+        CRUD::addColumn([
+            'label' => 'Reparation ID',
+            'name' => 'reparation_id'
+        ]);
+        CRUD::addColumn([
+            'label' => 'Customer',
+            'name' => 'name',
+            'type' => 'select',
+            'entity' => 'customers', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+        ]);
+        CRUD::addColumn([
+            'label' => 'Phone',
+            'name' => 'phone',
+            'type' => 'select',
+            'entity' => 'customers', // the method that defines the relationship in your Model
+            'attribute' => 'phone', // foreign key attribute that is shown to user
+            'prefix' => '+62'
+        ]);
+        CRUD::addColumn([
+            'label' => 'Brand',
+            'name' => 'brand',
+            'type' => 'select',
+            'entity' => 'computers',
+            'attribute' => 'brand',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Type',
+            'name' => 'type',
+            'type' => 'select',
+            'entity' => 'computers',
+            'attribute' => 'type',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Serial Number',
+            'name' => 'serial_number',
+            'type' => 'select',
+            'entity' => 'computers',
+            'attribute' => 'serial_number',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Problem',
+            'name' => 'problem',
+            'type' => 'select',
+            'entity' => 'computers',
+            'attribute' => 'problem',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Equipment (Bag)',
+            'name' => 'eq_bag',
+            'type' => 'model_function',
+            'function_name' => 'getEqBag'
+        ]);
+        CRUD::addColumn([
+            'label' => 'Equipment (Charger Cable)',
+            'name' => 'eq_charger_cable',
+            'type' => 'model_function',
+            'function_name' => 'getEqChargerCable'
+        ]);
+        CRUD::addColumn([
+            'label' => 'Received by',
+            'name' =>'received_by',
+            'type' => 'select',
+            'entity' => 'receivedBy', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+        ]);
+        
+    }
+
     /**
      * Define what happens when the Create operation is loaded.
      * 
