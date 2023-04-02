@@ -56,8 +56,15 @@ class ReparationListCrudController extends CrudController
             'name' => 'reparation_id'
         ]);
         CRUD::addColumn([
-            'label' => 'Computer',
-            'name' => 'computer_id',
+            'label' => 'Brand',
+            'name' => 'brand',
+            'type' => 'select',
+            'entity' => 'computers',
+            'attribute' => 'brand',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Type',
+            'name' => 'type',
             'type' => 'select',
             'entity' => 'computers',
             'attribute' => 'type',
@@ -67,13 +74,6 @@ class ReparationListCrudController extends CrudController
             'name' => 'customer_id',
             'type' => 'select',
             'entity' => 'customers', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-        ]);
-        CRUD::addColumn([
-            'label' => 'Received by',
-            'name' => 'received_by',
-            'type' => 'select',
-            'entity' => 'receivedBy', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
         ]);
 

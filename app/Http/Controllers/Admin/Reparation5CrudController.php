@@ -61,8 +61,15 @@ class Reparation5CrudController extends CrudController
             'name' => 'reparation_id'
         ]);
         CRUD::addColumn([
-            'label' => 'Computer',
-            'name' => 'computer_id',
+            'label' => 'Brand',
+            'name' => 'brand',
+            'type' => 'select',
+            'entity' => 'computers',
+            'attribute' => 'brand',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Type',
+            'name' => 'type',
             'type' => 'select',
             'entity' => 'computers',
             'attribute' => 'type',
