@@ -19,7 +19,7 @@ class Invoice extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['invoice_id','reparation_id','total','invoice_pdf_dir','payment_status','pickup_status'];
+    protected $fillable = ['invoice_number','reparation_id','total','invoice_pdf_dir','payment_status','pickup_status'];
     // protected $hidden = [];
     // protected $dates = [];
 

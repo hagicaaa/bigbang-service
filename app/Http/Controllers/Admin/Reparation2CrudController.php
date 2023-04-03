@@ -145,7 +145,7 @@ class Reparation2CrudController extends CrudController
             'function_name' => 'getEqBag'
         ]);
         CRUD::addColumn([
-            'label' => 'Equipment (Charger Cable)',
+            'label' => 'Equipment (Cable)',
             'name' => 'eq_charger_cable',
             'type' => 'model_function',
             'function_name' => 'getEqChargerCable'

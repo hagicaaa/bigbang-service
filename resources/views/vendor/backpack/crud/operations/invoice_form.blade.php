@@ -198,7 +198,7 @@
                 var qty = $("#qty").val();
                 var reparation_id = {{ $entry->id }};
                 $.ajax({
-                    url: "{{ url('admin/qc-inspection/' . $entry->id . '/invoice/add-item') }}",
+                    url: "{{ url('admin/reparation-done/' . $entry->id . '/invoice/add-item') }}",
                     type: "post",
                     dataType: 'json',
                     data: {

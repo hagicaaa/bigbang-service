@@ -11,6 +11,7 @@ use App\Models\InvoiceDetail;
 use App\Models\Service;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Request;
@@ -200,7 +201,7 @@ class Reparation5CrudController extends CrudController
         $invoice_data = Invoice::where('reparation_id', $id)->first();
         if ($invoice_data == NULL) {
             $invoice = Invoice::create([
-                'invoice_id' => 'INV-' . $reparation_data->reparation_id,
+                'invoice_number' => 'INV-' . $reparation_data->reparation_id,
                 'reparation_id' => $reparation_data->id,
             ]);
             \Alert::add('success', 'Invoice created succesfully!')->flash();
@@ -297,7 +298,7 @@ class Reparation5CrudController extends CrudController
             ->leftJoin('services', 'services.id', '=', 'service_id')
             ->get();
         $pdf = Pdf::loadView('crud::print', $data)->setPaper('a4', 'landscape');
-        return $pdf->stream($data['invoice']->invoice_id.'.pdf');
+        return $pdf->stream($data['invoice']->invoice_number.'.pdf');
         // return view('crud::print', $data);
     }
 
@@ -305,6 +306,10 @@ class Reparation5CrudController extends CrudController
     {
         $reparation = Reparation::where('id', $id)->first();
         $invoice = Invoice::where('reparation_id', $id)->first();
+        if($invoice){
+            \Alert::error("You have to create invoice data first!")->flash();
+            return redirect(backpack_url('reparation-done'));
+        }
         $customer = Customer::where('id', $reparation->customer_id)->first();
         DB::beginTransaction();
         try{

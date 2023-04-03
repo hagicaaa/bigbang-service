@@ -54,7 +54,7 @@
             </caption>
             <thead>
                 <tr>
-                    <th colspan="3">Invoice <strong>#{{ $invoice->invoice_id }}</strong></th>
+                    <th colspan="3">Invoice <strong>#{{ $invoice->invoice_number }}</strong></th>
                     <th>{{ $invoice->created_at->format('D, d M Y') }}</th>
                 </tr>
                 <tr>

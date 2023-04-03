@@ -69,7 +69,7 @@ class InvoiceCrudController extends CrudController
         ]);
         
         CRUD::addField([
-            'name' => 'invoice_id',
+            'name' => 'invoice_number',
             'label' => 'Invoice ID',
             'type' => 'text',
             'value' => "INV".strtotime("now")

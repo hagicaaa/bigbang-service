@@ -15,7 +15,7 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_id');
+            $table->string('invoice_number');
             $table->unsignedBigInteger('reparation_id');
             $table->integer('total')->nullable();
             $table->string('invoice_pdf_dir')->nullable();
