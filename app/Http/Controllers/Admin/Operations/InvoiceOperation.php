@@ -46,7 +46,7 @@ trait InvoiceOperation
 
         $this->crud->operation('list', function () {
             // $this->crud->addButton('top', 'invoice', 'view', 'crud::buttons.invoice');
-            $this->crud->addButton('line', 'invoice', 'view', 'crud::buttons.create_invoice_detail');
+            $this->crud->addButtonFromModelFunction('line', 'create_invoice', 'createInvoiceButton', 'beginning');
         });
     }
 

@@ -17,7 +17,7 @@ class SparepartRestockCrudController extends CrudController
     // use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     // use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    // use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -58,11 +58,47 @@ class SparepartRestockCrudController extends CrudController
             'name' => 'updated_at',
             'type' => 'date'
         ]);
+
+        CRUD::addColumn([
+            'label' => 'Photo',
+            'name' => 'invoice_dir',
+            'type' => 'image',
+            'prefix' => 'storage/', 
+        ]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
          */
+    }
+
+    public function setupShowOperation()
+    {
+        CRUD::addColumn([
+            'label' => 'Sparepart',
+            'name' => 'sparepart',
+            'type' => 'select',
+            'entity' => 'service',
+            'attribute' => 'name',
+        ]);
+
+        CRUD::addColumn([
+            'label' => 'Qty',
+            'name' => 'qty',
+        ]);
+
+        CRUD::addColumn([
+            'label' => 'Updated at',
+            'name' => 'updated_at',
+            'type' => 'date'
+        ]);
+
+        CRUD::addColumn([
+            'label' => 'Photo',
+            'name' => 'invoice_dir',
+            'type' => 'image',
+            'prefix' => 'storage/', 
+        ]);
     }
 
     /**

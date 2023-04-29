@@ -67,6 +67,17 @@ class Reparation extends Model
             return 'Yes';
         }
     }
+
+    public function createInvoiceButton()
+    {
+        $invoice = Invoice::where('reparation_id',$this->id)->first();
+        if($invoice){
+            return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/invoice/" name="create_invoice_detail" class="btn btn-sm btn-link"><i class="la la-edit"></i> Add Invoice Detail</a>';
+        }
+        else{
+            return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/invoice/create" name="create_invoice" class="btn btn-sm btn-link"><i class="la la-edit"></i> Create Invoice</a>';
+        }
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

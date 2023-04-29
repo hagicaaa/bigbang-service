@@ -61,9 +61,16 @@
                             <label>Qty</label>
                             <input type="number" name="qty" class="form-control" required>
                         </div>
-                        <div class="form-group col-md-7">
+                        <div class="form-group col-md-6">
                             <label>Invoice Photo</label>
-                            <input type="file" name="invoice_photo" class="form-control">
+                            <div id="my_camera"></div>
+                            <br/>
+                            <input type=button value="Take Snapshot" onClick="take_snapshot()">
+                            <input type="hidden" name="image" class="image-tag">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <br>
+                            <div id="results">Results</div>
                         </div>
                     </div>
                 </div>
@@ -92,6 +99,7 @@
     <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
     <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
     <!-- Datatables js -->
 <script type="text/javascript" src="{{ asset('packages/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('packages/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -112,4 +120,22 @@
                 }
             });
     </script>
+<script language="JavaScript">
+    Webcam.set({
+        width: 320,
+        height: 180,
+        image_format: 'jpeg',
+        jpeg_quality: 90,
+        flip_horiz: false,
+    });
+    
+    Webcam.attach( '#my_camera' );
+    
+    function take_snapshot() {
+        Webcam.snap( function(data_uri) {
+            $(".image-tag").val(data_uri);
+            document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/>';
+        } );
+    }
+</script>
 @endsection

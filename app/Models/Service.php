@@ -29,6 +29,13 @@ class Service extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function restockButton()
+    {
+        if($this->category == 'sparepart'){
+            return '<a href="'.backpack_url('service').'/'.$this->id.'/restock/" class="btn btn-sm btn-link"><i class="la la-box"></i> Restock</a>';
+        }
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

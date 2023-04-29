@@ -18,7 +18,7 @@
     <ul class="nav-dropdown-items">
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('computer') }}'><i class='nav-icon la la-desktop'></i> Computers</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('customer') }}'><i class='nav-icon la la-address-card'></i> Customers</a></li>
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('service') }}'><i class='nav-icon la la-question'></i> Services & Spareparts</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('service') }}'><i class='nav-icon la la-cogs'></i> Services & Spareparts</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('sparepart-restock') }}'><i class='nav-icon la la-box'></i> Sparepart Restock</a></li>
     </ul>
 </li>

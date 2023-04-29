@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin\Operations;
 
 use App\Models\Service;
 use App\Models\SparepartRestock;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Prologue\Alerts\Facades\Alert;
 
@@ -49,6 +51,7 @@ trait RestockOperation
         $this->crud->operation('list', function () {
             // $this->crud->addButton('top', 'restock', 'view', 'crud::buttons.restock');
             $this->crud->addButton('line', 'restock', 'view', 'crud::buttons.restock');
+            $this->crud->addButtonFromModelFunction('line', 'restock', 'restockButton', 'end');
         });
     }
 
@@ -87,14 +90,29 @@ trait RestockOperation
 
         $entry = $this->crud->getCurrentEntry();
 
+        // dd(date("Y-m-d H.i.s"));
+
+        
         DB::beginTransaction();
         try {
-
+            $img = $request->image;
+            $folderPath = "public/uploads/sparepart_restock_invoice/";
+            $image_parts = explode(";base64,", $img);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            
+            $image_base64 = base64_decode($image_parts[1]);
+            $fileName = $entry->part_number . "_RESTOCK_" . date("Y-m-d H.i.s") . '.png';
+            
+            $file = $folderPath . $fileName;
+            Storage::put($file, $image_base64);
+            
             $restock = new SparepartRestock();
             $restock->sparepart_id = $entry->id;
             $restock->qty = $request->qty;
+            $restock->invoice_dir = "uploads/sparepart_restock_invoice/" . $fileName;
             $restock->save();
-
+            
             $sparepart_data = Service::where('id',$entry->id)->first();
             $sparepart_data->qty = $sparepart_data->qty + $request->qty;
             $sparepart_data->save();
