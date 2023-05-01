@@ -74,6 +74,7 @@ class SparepartRestockCrudController extends CrudController
 
     public function setupShowOperation()
     {
+        CRUD::set('show.setFromDb', false);
         CRUD::addColumn([
             'label' => 'Sparepart',
             'name' => 'sparepart',

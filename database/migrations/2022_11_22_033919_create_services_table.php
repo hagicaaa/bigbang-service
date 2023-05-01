@@ -18,7 +18,7 @@ class CreateServicesTable extends Migration
             $table->string('name');
             $table->string('category')->nullable();
             $table->string('part_number')->nullable();
-            $table->integer('item_qty')->nullable();
+            $table->integer('qty')->nullable();
             $table->integer('price');
             $table->timestamps();
         });
