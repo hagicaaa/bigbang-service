@@ -78,6 +78,25 @@ class Reparation extends Model
             return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/invoice/create" name="create_invoice" class="btn btn-sm btn-link"><i class="la la-edit"></i> Create Invoice</a>';
         }
     }
+    
+    public function generateInvoiceButton()
+    {
+        $invoice = Invoice::where('reparation_id',$this->id)->first();
+        if($invoice){
+            return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/generate-invoice" name="generate_invoice" class="btn btn-sm btn-link"><i class="la la-note"></i> Generate Invoice</a>';
+        }
+    }
+
+    public function updatePaymentButton()
+    {
+        $invoice = Invoice::where('reparation_id',$this->id)->first();
+        if(!$invoice->payment_status){
+            return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/update-payment" class="btn btn-sm btn-link"><i class="la la-edit"></i> Update Payment</a>';
+        }
+        else{
+            return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/update-pickup" class="btn btn-sm btn-link"><i class="la la-edit"></i> Update Pickup</a>';
+        }
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

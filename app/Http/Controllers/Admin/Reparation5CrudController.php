@@ -55,8 +55,9 @@ class Reparation5CrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::addButtonFromView('line', 'update-payment', 'update_payment', 'beginning');
+        // CRUD::addButtonFromView('line', 'update-payment', 'update_payment', 'beginning');
         // CRUD::addButtonFromView('line', 'create_invoice', 'create_invoice', 'beginning');
+        CRUD::addButtonFromModelFunction('line', 'update_payment', 'updatePaymentButton', 'beginning');
         CRUD::addColumn([
             'label' => 'Reparation ID',
             'name' => 'reparation_id'
