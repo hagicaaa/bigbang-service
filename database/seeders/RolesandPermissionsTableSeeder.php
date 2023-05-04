@@ -43,6 +43,22 @@ class RolesandPermissionsTableSeeder extends Seeder
             'name' => 'allow_role_delete',
             'guard_name' => 'web'
         ]);
+        Permission::create([
+            'name' => 'allow_qc_inspection',
+            'guard_name' => 'web'
+        ]);
+        Permission::create([
+            'name' => 'allow_booking_menu',
+            'guard_name' => 'web'
+        ]);
+        Permission::create([
+            'name' => 'allow_cashier_activity',
+            'guard_name' => 'web'
+        ]);
+        Permission::create([
+            'name' => 'allow_reparation',
+            'guard_name' => 'web'
+        ]);
 
         Role::create([
             'name' => 'admin',
