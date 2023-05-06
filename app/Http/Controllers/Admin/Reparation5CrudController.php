@@ -292,13 +292,20 @@ class Reparation5CrudController extends CrudController
             ->leftJoin('services', 'services.id', '=', 'service_id')
             ->get();
         $pdf = Pdf::loadView('crud::print', $data)->setPaper('a4', 'landscape');
-        // $pdf->stream($data['invoice']->invoice_number.'.pdf');
+        DB::beginTransaction();
         try{
             $pdf_path = 'public/uploads/cust_invoices/';
-            // dd($pdf_path);
             $content = $pdf->download()->getOriginalContent();
             Storage::put($pdf_path . $data['invoice']->invoice_number.'.pdf', $content);
+            $data['invoice']->invoice_pdf_dir = $pdf_path . $data['invoice']->invoice_number.'.pdf';
+            $data['invoice']->save();
+            DB::commit();
+            // $response = Http::asForm()->attach('files', 'storage/'.$data['invoice']->invoice_pdf_dir)->post('http://localhost:3000/send', [
+            //     'number' => $data['customer_data']->phone.'@c.us',
+            //     'message' => 'Hai kak ' . $data['customer_data']->name . ', komputer anda sudah kami perbaiki. Untuk total perbaikan sebanyak *Rp '.$data['invoice']->total.'*. Terimakasih. Salam Bigbang!',
+            // ]);
         } catch(\Exception $e){
+            DB::rollBack();
             $error_data = [];
             $error_data["function"] = "generateInvoice";
             $error_data["controller"] = "Reparation5CrudController";
@@ -309,8 +316,6 @@ class Reparation5CrudController extends CrudController
         }
         \Alert::add('success', 'PDF generated succesfully.')->flash();
         return redirect(backpack_url('reparation-done'));
-        // return $pdf->save($pdf_path . $data['invoice']->invoice_number.'.pdf');
-        // return view('crud::print', $data);
     }
 
     public function updatePayment($id)

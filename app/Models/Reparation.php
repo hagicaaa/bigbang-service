@@ -72,7 +72,12 @@ class Reparation extends Model
     {
         $invoice = Invoice::where('reparation_id',$this->id)->first();
         if($invoice){
-            return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/invoice/" name="create_invoice_detail" class="btn btn-sm btn-link"><i class="la la-edit"></i> Add Invoice Detail</a>';
+            if($invoice->payment_status == 1 && $invoice->pickup_status == 1){
+                return '';
+            }
+            else{
+                return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/invoice/" name="create_invoice_detail" class="btn btn-sm btn-link"><i class="la la-edit"></i> Add Invoice Detail</a>';
+            }
         }
         else{
             return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/invoice/create" name="create_invoice" class="btn btn-sm btn-link"><i class="la la-edit"></i> Create Invoice</a>';
@@ -90,10 +95,16 @@ class Reparation extends Model
     public function updatePaymentButton()
     {
         $invoice = Invoice::where('reparation_id',$this->id)->first();
+        if(!$invoice){
+            return '';
+        }
         if(!$invoice->payment_status){
             return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/update-payment" class="btn btn-sm btn-link"><i class="la la-edit"></i> Update Payment</a>';
         }
         else{
+            if($invoice->payment_status == 1 && $invoice->pickup_status == 1){
+                return '';
+            }
             return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/update-pickup" class="btn btn-sm btn-link"><i class="la la-edit"></i> Update Pickup</a>';
         }
     }
