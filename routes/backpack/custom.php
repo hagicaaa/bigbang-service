@@ -38,6 +38,7 @@ Route::group([
     Route::get('reparation-done/{id}/invoice/del-item/{item_id}', 'Reparation5CrudController@delItem')->name('del-item');
     Route::get('reparation-done/{id}/generate-invoice', 'Reparation5CrudController@generateInvoice');
     Route::get('reparation-done/{id}/update-payment', 'Reparation5CrudController@updatePayment');
+    Route::get('reparation-done/{id}/update-pickup', 'Reparation5CrudController@updatePickup');
 
 
 

@@ -299,7 +299,7 @@ class Reparation5CrudController extends CrudController
     {
         $reparation = Reparation::where('id', $id)->first();
         $invoice = Invoice::where('reparation_id', $id)->first();
-        if($invoice){
+        if(!$invoice){
             \Alert::error("You have to create invoice data first!")->flash();
             return redirect(backpack_url('reparation-done'));
         }
