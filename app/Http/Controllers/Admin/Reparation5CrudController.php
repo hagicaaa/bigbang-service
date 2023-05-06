@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Reparation5CrudController
@@ -291,7 +292,24 @@ class Reparation5CrudController extends CrudController
             ->leftJoin('services', 'services.id', '=', 'service_id')
             ->get();
         $pdf = Pdf::loadView('crud::print', $data)->setPaper('a4', 'landscape');
-        return $pdf->stream($data['invoice']->invoice_number.'.pdf');
+        // $pdf->stream($data['invoice']->invoice_number.'.pdf');
+        try{
+            $pdf_path = 'public/uploads/cust_invoices/';
+            // dd($pdf_path);
+            $content = $pdf->download()->getOriginalContent();
+            Storage::put($pdf_path . $data['invoice']->invoice_number.'.pdf', $content);
+        } catch(\Exception $e){
+            $error_data = [];
+            $error_data["function"] = "generateInvoice";
+            $error_data["controller"] = "Reparation5CrudController";
+            $error_data["message"] = $e->getMessage();
+
+            Log::error("Create failed", $error_data);
+            \Alert::error("Create failed")->flash();
+        }
+        \Alert::add('success', 'PDF generated succesfully.')->flash();
+        return redirect(backpack_url('reparation-done'));
+        // return $pdf->save($pdf_path . $data['invoice']->invoice_number.'.pdf');
         // return view('crud::print', $data);
     }
 
