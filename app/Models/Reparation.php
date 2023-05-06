@@ -97,6 +97,12 @@ class Reparation extends Model
             return '<a href="'.backpack_url('reparation-done').'/'.$this->id.'/update-pickup" class="btn btn-sm btn-link"><i class="la la-edit"></i> Update Pickup</a>';
         }
     }
+
+    public function getComputer()
+    {
+        $computer = Computer::where('id',$this->computer_id)->first();
+        return $computer->brand . " " . $computer->type;
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

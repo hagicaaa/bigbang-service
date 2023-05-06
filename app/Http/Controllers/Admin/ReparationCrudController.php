@@ -56,18 +56,10 @@ class ReparationCrudController extends CrudController
             'name' => 'reparation_id'
         ]);
         CRUD::addColumn([
-            'label' => 'Brand',
-            'name' => 'brand',
-            'type' => 'select',
-            'entity' => 'computers',
-            'attribute' => 'brand',
-        ]);
-        CRUD::addColumn([
-            'label' => 'Type',
-            'name' => 'type',
-            'type' => 'select',
-            'entity' => 'computers',
-            'attribute' => 'type',
+            'name'  => 'computer',
+            'label' => 'Computer', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getComputer', // the method in your Model
         ]);
         CRUD::addColumn([
             'label' => 'Customer',
