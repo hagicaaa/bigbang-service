@@ -114,6 +114,25 @@ class Reparation extends Model
         $computer = Computer::where('id',$this->computer_id)->first();
         return $computer->brand . " " . $computer->type;
     }
+
+    public function getReparationStatus()
+    {
+        if(!$this->inspection_date){
+            return 'On queue for checking';
+        }
+        if($this->repair_agree == 0){
+            return 'Reparation Cancelled';
+        }
+        if($this->repair_finish){
+            return 'Reparation Done';
+        }
+        if($this->repair_start){
+            return 'On repair';
+        }
+        if($this->inspection_date){
+            return 'Waiting for repair confirmation';
+        }
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

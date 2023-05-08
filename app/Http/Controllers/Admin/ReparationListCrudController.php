@@ -69,6 +69,13 @@ class ReparationListCrudController extends CrudController
             'attribute' => 'name', // foreign key attribute that is shown to user
         ]);
 
+        CRUD::addColumn([
+            'name'  => 'status',
+            'label' => 'Status', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getReparationStatus', // the method in your Model
+        ]);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
