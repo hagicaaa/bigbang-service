@@ -57,7 +57,7 @@ class Reparation5CrudController extends CrudController
     protected function setupListOperation()
     {
         // CRUD::addButtonFromView('line', 'update-payment', 'update_payment', 'beginning');
-        // CRUD::addButtonFromView('line', 'create_invoice', 'create_invoice', 'beginning');
+        CRUD::addButtonFromView('line', 'print_invoice', 'print_invoice', 'end');
         CRUD::addButtonFromModelFunction('line', 'update_payment', 'updatePaymentButton', 'beginning');
         CRUD::addColumn([
             'label' => 'Reparation ID',
@@ -300,10 +300,10 @@ class Reparation5CrudController extends CrudController
             $data['invoice']->invoice_pdf_dir = $pdf_path . $data['invoice']->invoice_number.'.pdf';
             $data['invoice']->save();
             DB::commit();
-            // $response = Http::asForm()->attach('files', 'storage/'.$data['invoice']->invoice_pdf_dir)->post('http://localhost:3000/send', [
-            //     'number' => $data['customer_data']->phone.'@c.us',
-            //     'message' => 'Hai kak ' . $data['customer_data']->name . ', komputer anda sudah kami perbaiki. Untuk total perbaikan sebanyak *Rp '.$data['invoice']->total.'*. Terimakasih. Salam Bigbang!',
-            // ]);
+            $response = Http::asForm()->attach('files', 'storage/'.$data['invoice']->invoice_pdf_dir)->post('http://localhost:3000/send', [
+                'number' => $data['customer_data']->phone.'@c.us',
+                'message' => 'Hai kak ' . $data['customer_data']->name . ', komputer anda sudah kami perbaiki. Untuk total perbaikan sebanyak *Rp '.$data['invoice']->total.'*. Terimakasih. Salam Bigbang!',
+            ]);
         } catch(\Exception $e){
             DB::rollBack();
             $error_data = [];
@@ -374,5 +374,17 @@ class Reparation5CrudController extends CrudController
         }
         \Alert::add('success', 'Payment updated succesfully.')->flash();
         return redirect(backpack_url('reparation-done'));
+    }
+
+    public function printInvoice($id)
+    {
+        $invoice_data = Invoice::where('reparation_id',$id)->first();
+        if($invoice_data->invoice_pdf_dir){
+            return response()->file(public_path('storage/'.substr($invoice_data->invoice_pdf_dir,7)));
+        }
+        else{
+            \Alert::add('error', 'Invoice not found')->flash();
+            return redirect(backpack_url('reparation-done'));
+        }
     }
 }

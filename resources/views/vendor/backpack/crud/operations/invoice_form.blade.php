@@ -126,10 +126,6 @@
                 </div>
                 <div class="d-none" id="parentLoadedAssets">[]</div>
                 <div id="saveActions" class="form-group">
-                    {{-- <button type="submit" class="btn btn-success">
-                        <span class="la la-save" role="presentation" aria-hidden="true"></span> &nbsp;
-                        <span data-value="send_email">Submit</span>
-                    </button> --}}
                     <a href="{{ backpack_url('reparation-done/'.$crud->entry->id.'/generate-invoice') }}" class="btn btn-success"><span class="la la-save"></span>
                         &nbsp;Generate Invoice</a>
                     <div class="btn-group" role="group">
