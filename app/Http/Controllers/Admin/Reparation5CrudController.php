@@ -300,7 +300,7 @@ class Reparation5CrudController extends CrudController
             $data['invoice']->invoice_pdf_dir = $pdf_path . $data['invoice']->invoice_number.'.pdf';
             $data['invoice']->save();
             DB::commit();
-            $response = Http::asForm()->attach('files', 'storage/'.$data['invoice']->invoice_pdf_dir)->post('http://localhost:3000/send', [
+            $response = Http::asForm()->post('http://localhost:3000/send', [
                 'number' => $data['customer_data']->phone.'@c.us',
                 'message' => 'Hai kak ' . $data['customer_data']->name . ', komputer anda sudah kami perbaiki. Untuk total perbaikan sebanyak *Rp '.$data['invoice']->total.'*. Terimakasih. Salam Bigbang!',
             ]);
