@@ -14,7 +14,7 @@ makeInMemoryStore,
 MessageRetryMap, 
 useMultiFileAuthState,
 msgRetryCounterMap
-} =require("@adiwajshing/baileys");
+} =require("@whiskeysockets/baileys");
 
 const log = (pino = require("pino"));
 const { session } = {"session": "session_info"};
