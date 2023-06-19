@@ -1,9 +1,9 @@
 # Instalasi
 
-0. Pastikan anda sudah menginstall Composer dan NPM sebelum menginstall aplikasi ini. Jika belum, mohon untuk mengunduh terlebih dahulu, lalu install. Pastikan juga anda sudah menginstall XAMPP atau aplikasi sejenis.
-Composer:
-https://getcomposer.org/download/
-NPM:
+0. Pastikan anda sudah menginstall Composer dan NPM sebelum menginstall aplikasi ini. Jika belum, mohon untuk mengunduh terlebih dahulu, lalu install. Pastikan juga anda sudah menginstall XAMPP atau aplikasi sejenis.\
+Composer: \
+https://getcomposer.org/download/ \
+NPM: \
 https://nodejs.org/en/download
 1. Jika sudah, download atau clone repo ini.
 2. Setelah itu, buka folder bigbang-service, buka terminal di folder tersebut, lalu ketikkan "composer install" untuk menginstall library yang dibutuhkan untuk Laravel
