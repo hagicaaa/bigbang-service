@@ -5,7 +5,7 @@ Composer: \
 https://getcomposer.org/download/ \
 Node.js: \
 https://nodejs.org/en/download
-2. Jika sudah, download atau clone repo ini.
+2. Jika sudah, download atau clone repo ini dengan cara mengetikkan perintah di terminal `git clone https://github.com/hagicaaa/bigbang-service.git`. Untuk melakukan clone, pastikan git sudah terinstall di komputer anda. Jika belum, anda dapat mendownload git pada link https://git-scm.com/downloads
 3. Setelah itu, buka folder bigbang-service, buka terminal di folder tersebut, lalu ketikkan "composer install" untuk menginstall library yang dibutuhkan untuk Laravel.
 4. Lalu hapus ".example" dari file ".env.example", lalu edit file tersebut.
 5. Sesuaikan konfigurasi sesuai konfigurasi database pada komputer anda. Buat database "bigbang-service" jika database belum dibuat. Database tersebut biarkan kosong karena nanti akan terisi menggunakan command.
