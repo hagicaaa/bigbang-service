@@ -19,9 +19,9 @@ https://nodejs.org/en/download
 12. Selesai. 
 
 # User Login
-Gunakan user login dibawah ini, untuk mengakses aplikasi.
-admin@bigbang.com
-tech@bigbang.com
-qc@bigbang.com
-cashier@bigbang.com
+Gunakan user login dibawah ini, untuk mengakses aplikasi.\
+admin@bigbang.com \
+tech@bigbang.com \
+qc@bigbang.com \
+cashier@bigbang.com \
 Password(ALL) : 12341234
