@@ -46,4 +46,30 @@ class TrackingController extends Controller
             }
         }
     }
+
+    public function searchReparationApi(Request $request){
+
+        $reparation_id = $request->reparation_id;
+
+        if(Reparation::where('reparation_id', $reparation_id)->first()){
+            $data = Reparation::select('reparation_id', 'computers.brand as computer_brand', 'computers.type as computer_type', 
+            'computers.problem as computer_problem', 'computers.serial_number as computer_sn', 'computers.eq_bag as computer_bag', 'computers.eq_charger_cable as computer_charger',
+            'customers.name as customer_name', 'customers.phone as customer_phone', 'inspection_date', 
+            'repair_agree', 'repair_start','repair_finish', 'post_repair_inspection_date', 'users.name as received',)
+            ->leftJoin('computers', 'computers.id', '=', 'computer_id')
+            ->leftJoin('customers', 'customers.id', '=', 'customer_id')
+            ->leftJoin('users', 'users.id','=', 'received_by')
+            ->where('reparation_id', $reparation_id)
+            ->first();
+            return response()->json(
+                json_decode($data)
+            ,200);
+        } else {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Data not found.'
+            ],404);
+        }
+
+    }
 }
